@@ -90,7 +90,7 @@
       statusEl.textContent = "⏳ กำลังส่งข้อมูล...";
 
       try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbzqIhEBiH0k6tJBe3RpBhPCO_ySQAsJoqsiR0PcWqZK8e-KIANxn1Z2f7UgXLroct3R/exec", {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbyrFwg2VSwI6nRth_-OuqicTuWOd7H_PSdOqAvJHq9gtVeA-b9Ux7cJpxVx3shf30X3/exec", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ cardId, staffId })
