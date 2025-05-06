@@ -5,40 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ยืนยันผู้มาติดต่อ</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 40px 20px;
+      padding: 0;
+      background: #f6f6f6;
+      font-family: "Segoe UI", sans-serif;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      background: #f4f4f4;
+      height: 100vh;
     }
     .container {
-      background: white;
-      padding: 24px;
+      background: #fff;
+      padding: 30px 40px;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      width: 100%;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 90%;
       max-width: 400px;
     }
     h2 {
-      text-align: center;
       margin-bottom: 20px;
       color: #333;
     }
     label {
-      font-weight: bold;
       display: block;
       margin-bottom: 8px;
+      font-weight: bold;
+      text-align: left;
+      color: #444;
     }
-    input {
+    input[type="text"] {
       width: 100%;
       padding: 10px;
-      margin-bottom: 20px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
       font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 15px;
     }
     button {
       width: 100%;
@@ -49,14 +55,14 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
     button:hover {
       background-color: #0b5ed7;
     }
     .status {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 15px;
+      margin-top: 15px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -64,46 +70,48 @@
   <div class="container">
     <h2>ยืนยันการเข้าพบ</h2>
     <label for="staffId">กรอกรหัสพนักงาน</label>
-    <input type="text" id="staffId" placeholder="เช่น EMP123" />
+    <input type="text" id="staffId" placeholder="เช่น 1559" />
     <button onclick="submitConfirmation()">ยืนยัน</button>
-    <div class="status" id="status"></div>
+    <div id="status" class="status"></div>
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const cardId = urlParams.get('card');
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyrFwg2VSwI6nRth_-OuqicTuWOd7H_PSdOqAvJHq9gtVeA-b9Ux7cJpxVx3shf30X3/exec"; // 🔁 เปลี่ยนเป็นของคุณ
 
     async function submitConfirmation() {
-      const staffId = document.getElementById("staffId").value.trim();
-      const statusEl = document.getElementById("status");
+      const urlParams = new URLSearchParams(window.location.search);
+      const cardId = urlParams.get('card');
+      const staffId = document.getElementById('staffId').value.trim();
+      const statusMessage = document.getElementById('status');
 
-      if (!cardId) {
-        statusEl.textContent = "❌ ไม่พบรหัสบัตร (card ID)";
+      if (!staffId || !cardId) {
+        statusMessage.innerHTML = "❌ กรุณากรอกรหัสพนักงานและตรวจสอบลิงก์ QR";
+        statusMessage.style.color = "red";
         return;
       }
-
-      if (!staffId) {
-        statusEl.textContent = "⚠️ กรุณากรอกรหัสพนักงาน";
-        return;
-      }
-
-      statusEl.textContent = "⏳ กำลังส่งข้อมูล...";
 
       try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbyrFwg2VSwI6nRth_-OuqicTuWOd7H_PSdOqAvJHq9gtVeA-b9Ux7cJpxVx3shf30X3/exec", {
+        const response = await fetch(scriptURL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ cardId, staffId })
         });
 
-        const result = await res.json();
+        const result = await response.json();
+
         if (result.success) {
-          statusEl.innerHTML = "✅ ยืนยันสำเร็จแล้ว ขอบคุณ!";
+          statusMessage.innerHTML = "✅ ยืนยันการเข้าพบเรียบร้อยแล้ว";
+          statusMessage.style.color = "green";
         } else {
-          statusEl.innerHTML = "❌ เกิดข้อผิดพลาด: " + result.message;
+          statusMessage.innerHTML = "❌ " + (result.message || "ไม่สามารถยืนยันได้");
+          statusMessage.style.color = "red";
         }
       } catch (error) {
-        statusEl.innerHTML = "❌ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้";
+        console.error(error);
+        statusMessage.innerHTML = "❌ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้";
+        statusMessage.style.color = "red";
       }
     }
   </script>
