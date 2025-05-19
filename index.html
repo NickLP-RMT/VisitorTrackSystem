@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ยืนยันผู้มาติดต่อ</title>
+  <title>📦 บันทึกบาร์โค้ด</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -16,20 +16,17 @@
     }
     .card {
       background: white;
-      padding: 30px 40px;
+      padding: 30px;
       border-radius: 12px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      width: 340px;
       text-align: center;
-      width: 320px;
-    }
-    h2 {
-      margin-bottom: 20px;
     }
     input {
       padding: 10px;
       font-size: 16px;
       width: 100%;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 6px;
     }
@@ -50,66 +47,63 @@
       margin-top: 15px;
       font-size: 14px;
     }
-    .error {
-      color: red;
-    }
-    .success {
-      color: green;
-    }
+    .error { color: red; }
+    .success { color: green; }
   </style>
 </head>
 <body>
   <div class="card">
-    <h2>ยืนยันการเข้าพบ</h2>
-    <label for="staffId">กรอกรหัสพนักงาน</label>
-    <input type="text" id="staffId" placeholder="เช่น 1559" />
-    <button onclick="submitConfirmation()">ยืนยัน</button>
+    <h2>📦 กรอกข้อมูลบาร์โค้ด</h2>
+    <input type="text" id="barcode" placeholder="Barcode" />
+    <input type="number" id="quantity" placeholder="Quantity" />
+    <input type="text" id="scanner" placeholder="Scanner Name" />
+    <button onclick="submitBarcode()">ส่งข้อมูล</button>
     <div class="message" id="result"></div>
   </div>
 
   <script>
-    const apiURL = "https://script.google.com/macros/s/AKfycbyQ7SGO38g0h4zklMBcvsWNOnuz_sH_EZq-SOqACUvM6r9HWzHPvhTyT87MoB0H8v4/exec"; // เปลี่ยนเป็น URL ของคุณ
+    const apiURL = "https://script.google.com/macros/s/AKfycby_BsI2EPq19QnDwwWImSIznLlNP6CGdoBBEKshh4-7R8_tOubPnNeUo9uJyvZ7Y8QW/exec";
 
-    function getQueryParam(key) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(key);
-    }
-
-    async function submitConfirmation() {
-      const staffId = document.getElementById("staffId").value.trim();
-      const cardId = getQueryParam("card");
+    async function submitBarcode() {
+      const barcode = document.getElementById("barcode").value.trim();
+      const quantity = document.getElementById("quantity").value.trim();
+      const scanner = document.getElementById("scanner").value.trim();
       const result = document.getElementById("result");
       result.textContent = "";
       result.className = "message";
 
-      if (!staffId || !cardId) {
-        result.textContent = "กรุณากรอกรหัสพนักงานให้ครบถ้วน";
+      if (!barcode || !quantity || !scanner) {
+        result.textContent = "❌ กรุณากรอกข้อมูลให้ครบ";
         result.classList.add("error");
         return;
       }
 
-      try {
-        const params = new URLSearchParams();
-        params.append("page", "confirmVisit");
-        params.append("cardId", cardId);
-        params.append("staffId", staffId);
+      const params = new URLSearchParams();
+      params.append("page", "submitBarcode");
+      params.append("barcode", barcode);
+      params.append("quantity", quantity);
+      params.append("scanner", scanner);
 
+      try {
         const res = await fetch(`${apiURL}?${params.toString()}`, {
           method: "POST"
         });
-
         const data = await res.json();
 
         if (data.success) {
-          result.textContent = "✅ ยืนยันเรียบร้อยแล้ว";
+          result.textContent = data.message;
           result.classList.add("success");
+          document.getElementById("barcode").value = "";
+          document.getElementById("quantity").value = "";
+          document.getElementById("scanner").value = "";
         } else {
-          result.textContent = "❌ ไม่สามารถบันทึกข้อมูลได้";
+          result.textContent = data.message;
           result.classList.add("error");
         }
-      } catch (error) {
+      } catch (err) {
         result.textContent = "❌ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้";
         result.classList.add("error");
+        console.error(err);
       }
     }
   </script>
