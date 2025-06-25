@@ -6,6 +6,7 @@
   <title>ลงทะเบียนผู้มาติดต่อ - RMT Visitor Check-in</title>
   <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     * {
       margin: 0;
@@ -360,7 +361,7 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-  </style>
+   </style>
 </head>
 <body>
   <button class="back-button" onclick="history.back()">← กลับ</button>
@@ -373,10 +374,7 @@
   </div>
 
   <div class="container">
-    <h2 class="main-title">
-      📋 ลงทะเบียนผู้มาติดต่อ
-    </h2>
-
+    <h2 class="main-title">📋 ลงทะเบียนผู้มาติดต่อ</h2>
     <form id="visitorForm">
       <div class="form-section">
         <div class="section-title">👤 ข้อมูลส่วนตัว</div>
@@ -436,10 +434,11 @@
         </div>
       </div>
 
-      <button type="submit" class="submit-button" id="submitBtn">
+       <button type="submit" class="submit-button" id="submitBtn">
         ✅ สร้าง QR Code
       </button>
     </form>
+  </div>
 
     <div id="qrcode">
       <div class="qr-title">
@@ -454,75 +453,67 @@
   </div>
 
   <script>
-    document.getElementById('visitorForm').addEventListener('submit', function(e) {
+     document.getElementById('visitorForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      // Get form data
       const data = {
         fullName: document.getElementById('fullName').value.trim(),
         company: document.getElementById('company').value.trim(),
         carPlate: document.getElementById('carPlate').value.trim(),
         purpose: document.getElementById('purpose').value,
         contactPerson: document.getElementById('contactPerson').value.trim(),
-        department: document.getElementById('department').value,
-        timestamp: new Date().toLocaleString('th-TH'),
-        checkIn: new Date().getTime()
+        department: document.getElementById('department').value
       };
 
-      // Validate required fields
       if (!data.fullName || !data.company || !data.purpose || !data.contactPerson || !data.department) {
         alert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน');
         return;
       }
 
-      // Show loading state
       const submitBtn = document.getElementById('submitBtn');
       const originalText = submitBtn.innerHTML;
       submitBtn.innerHTML = '<span class="loading"></span> กำลังสร้าง QR Code...';
       submitBtn.disabled = true;
 
-      // Generate QR Code after a short delay for better UX
       setTimeout(() => {
         try {
-          const qrDiv = document.getElementById('qrcode');
-          const qrContainer = document.getElementById('qr-container');
-          qrContainer.innerHTML = '';
-
-          // Compress data for QR code
           const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(data));
-          
-          // Generate QR code
-          new QRCode(qrContainer, {
+          const qrPopup = document.createElement('div');
+          qrPopup.innerHTML = `
+            <h3 style="margin-bottom: 16px; color: #2c5282;">📄 QR Code ผู้มาติดต่อ</h3>
+            <div id="qr-code-container"></div>
+            <p style="font-size: 13px; margin-top: 15px; color: #555;">
+              โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่รักษาความปลอดภัย<br>
+              กรุณาเก็บไว้จนกว่าจะออกจากบริษัท
+            </p>
+          `;
+
+          const container = qrPopup.querySelector('#qr-code-container');
+          new QRCode(container, {
             text: compressed,
-            width: 200,
-            height: 200,
-            colorDark: "#2c5282",
+            width: 280,
+            height: 280,
+            colorDark: "#000000",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
           });
 
-          // Show QR code section
-          qrDiv.classList.add('show');
-          
-          // Scroll to QR code
-          qrDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          Swal.fire({
+            title: 'QR Code ของคุณ',
+            html: qrPopup,
+            confirmButtonText: 'ปิด',
+            width: 350
+          });
 
-          // Reset button
           submitBtn.innerHTML = '✅ สร้าง QR Code ใหม่';
           submitBtn.disabled = false;
-
-          // Store data for potential reuse
-          sessionStorage.setItem('visitorData', JSON.stringify(data));
-
-        } catch (error) {
-          console.error('Error generating QR code:', error);
-          alert('เกิดข้อผิดพลาดในการสร้าง QR Code กรุณาลองใหม่อีกครั้ง');
-          
-          // Reset button on error
+        } catch (err) {
+          console.error('QR Error:', err);
+          alert('เกิดข้อผิดพลาดในการสร้าง QR Code');
           submitBtn.innerHTML = originalText;
           submitBtn.disabled = false;
         }
-      }, 1000);
+      }, 600);
     });
 
     // Add touch feedback for mobile
