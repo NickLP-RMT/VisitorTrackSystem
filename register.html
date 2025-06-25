@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ลงทะเบียนผู้มาติดต่อ - RMT Visitor Check-in</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f4f7;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 25px 20px;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #0d6efd;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background: #0d6efd;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0b5ed7;
+    }
+    #qrcode {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+    }
+    @media screen and (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .container {
+        padding: 20px 15px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📋 ลงทะเบียนผู้มาติดต่อ</h2>
+    <form id="visitorForm">
+      <div class="form-group">
+        <label for="fullName">ชื่อ-นามสกุล:</label>
+        <input type="text" id="fullName" required>
+      </div>
+      <div class="form-group">
+        <label for="company">บริษัทต้นสังกัด:</label>
+        <input type="text" id="company" required>
+      </div>
+      <div class="form-group">
+        <label for="carPlate">ทะเบียนรถ:</label>
+        <input type="text" id="carPlate">
+      </div>
+      <div class="form-group">
+        <label for="purpose">วัตถุประสงค์:</label>
+        <select id="purpose" required>
+          <option value="">-- กรุณาเลือก --</option>
+          <option value="ติดต่องาน">ติดต่องาน</option>
+          <option value="ส่งของ/รับของ">ส่งของ/รับของ</option>
+          <option value="สมัครงาน">สมัครงาน</option>
+          <option value="อื่น ๆ">อื่น ๆ</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="contactPerson">เข้าพบ:</label>
+        <input type="text" id="contactPerson" required>
+      </div>
+      <div class="form-group">
+        <label for="department">แผนก:</label>
+        <select id="department" required>
+          <option value="">-- กรุณาเลือก --</option>
+          <option value="ฝ่ายผลิต">ฝ่ายผลิต</option>
+          <option value="คลังสินค้า">คลังสินค้า</option>
+          <option value="ซ่อมบำรุง">ซ่อมบำรุง</option>
+          <option value="บริหาร">บริหาร</option>
+        </select>
+      </div>
+      <button type="submit">✅ สร้าง QR Code</button>
+    </form>
+
+    <div id="qrcode"></div>
+  </div>
+
+  <script>
+    document.getElementById('visitorForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const data = {
+        fullName: document.getElementById('fullName').value,
+        company: document.getElementById('company').value,
+        carPlate: document.getElementById('carPlate').value,
+        purpose: document.getElementById('purpose').value,
+        contactPerson: document.getElementById('contactPerson').value,
+        department: document.getElementById('department').value
+      };
+
+      const qr = document.getElementById('qrcode');
+      qr.innerHTML = '';
+      new QRCode(qr, {
+        text: JSON.stringify(data),
+        width: 220,
+        height: 220,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+      });
+    });
+  </script>
+</body>
+</html>
