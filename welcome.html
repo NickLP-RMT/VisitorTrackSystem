@@ -5,69 +5,297 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ยินดีต้อนรับ - RMT Visitor Check-in</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      background: #f0f4f8;
+      padding: 20px;
       color: #333;
-      text-align: center;
-    }
-    .container {
-      width: 90%;
-      max-width: 600px;
-      padding: 30px 20px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      font-size: 22px;
-      margin-bottom: 20px;
-      color: #0d6efd;
-    }
-    p {
-      font-size: 15px;
-      margin-bottom: 30px;
       line-height: 1.6;
     }
-    button {
-      padding: 12px 24px;
+
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+      border-radius: 20px 20px 0 0;
+      text-align: center;
+      border-bottom: 3px solid #2c5282;
+    }
+
+    .logo-section {
+      margin-bottom: 15px;
+    }
+
+    .company-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 5px;
+      letter-spacing: 0.5px;
+    }
+
+    .system-title {
+      font-size: 14px;
+      color: #4a5568;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .main-container {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      width: 100%;
+      max-width: 500px;
+      padding: 30px;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .main-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #2c5282, #3182ce, #4299e1);
+    }
+
+    .shield-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #2c5282;
+      text-shadow: 0 2px 4px rgba(44, 82, 130, 0.3);
+    }
+
+    .main-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    .content-text {
+      font-size: 15px;
+      color: #4a5568;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      text-align: left;
+      background: #f7fafc;
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid #3182ce;
+    }
+
+    .highlight-text {
+      color: #2c5282;
+      font-weight: 600;
+    }
+
+    .consent-button {
+      width: 100%;
+      padding: 16px 24px;
       font-size: 16px;
-      background-color: #0d6efd;
+      font-weight: 600;
+      background: linear-gradient(135deg, #2c5282 0%, #3182ce 100%);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background 0.3s;
-      width: 100%;
-      max-width: 300px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(44, 82, 130, 0.3);
+      text-transform: none;
+      letter-spacing: 0.3px;
     }
-    button:hover {
-      background-color: #0b5ed7;
+
+    .consent-button:hover {
+      background: linear-gradient(135deg, #2a4c80 0%, #2c7cb8 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(44, 82, 130, 0.4);
+    }
+
+    .consent-button:active {
+      transform: translateY(0);
+    }
+
+    .footer-info {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #718096;
+      text-align: center;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+      
+      .header {
+        padding: 15px;
+        border-radius: 15px 15px 0 0;
+      }
+      
+      .company-name {
+        font-size: 20px;
+      }
+      
+      .system-title {
+        font-size: 12px;
+      }
+      
+      .main-container {
+        padding: 25px 20px;
+        border-radius: 0 0 15px 15px;
+      }
+      
+      .shield-icon {
+        font-size: 40px;
+        margin-bottom: 15px;
+      }
+      
+      .main-title {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+      
+      .content-text {
+        font-size: 14px;
+        padding: 15px;
+        margin-bottom: 25px;
+      }
+      
+      .consent-button {
+        padding: 14px 20px;
+        font-size: 15px;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 320px) {
+      .header, .main-container {
+        max-width: 280px;
+      }
+      
+      .company-name {
+        font-size: 18px;
+      }
+      
+      .main-title {
+        font-size: 16px;
+      }
+      
+      .content-text {
+        font-size: 13px;
+      }
+    }
+
+    /* iOS safe area */
+    @supports (padding: max(0px)) {
+      body {
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header, .main-container {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .main-container {
+      animation-delay: 0.2s;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🛡️ ประกาศความยินยอมตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA)</h1>
-    <p>
-      บริษัทขอความยินยอมในการเก็บข้อมูลส่วนบุคคลของท่าน ได้แก่ ชื่อ-นามสกุล, บริษัทต้นสังกัด, ทะเบียนรถ, วัตถุประสงค์ในการเข้าพบ,
-      และข้อมูลอื่น ๆ เพื่อใช้สำหรับการลงทะเบียนและรักษาความปลอดภัยในการเข้า-ออกพื้นที่ของบริษัท<br><br>
-      เมื่อท่านกด "ยินยอมและดำเนินการต่อ" ถือว่าท่านได้อ่านและเข้าใจเงื่อนไขดังกล่าวแล้ว
-    </p>
-    <button onclick="goToForm()">✅ ยินยอมและดำเนินการต่อ</button>
+  <div class="header">
+    <div class="logo-section">
+      <div class="company-name">RMT CORPORATION</div>
+      <div class="system-title">Visitor Management System</div>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="shield-icon">🛡️</div>
+    
+    <h1 class="main-title">ประกาศความยินยอมตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล</h1>
+    
+    <div class="content-text">
+      บริษัทขอความยินยอมในการเก็บรวบรวม ใช้ และประมวลผลข้อมูลส่วนบุคคลของท่าน ได้แก่ 
+      <span class="highlight-text">ชื่อ-นามสกุล, บริษัทต้นสังกัด, ทะเบียนรถ, วัตถุประสงค์ในการเข้าพบ</span> 
+      และข้อมูลอื่น ๆ ที่เกี่ยวข้อง
+      <br><br>
+      วัตถุประสงค์: เพื่อการลงทะเบียนผู้เยี่ยมชม การรักษาความปลอดภัย และการควบคุมการเข้า-ออกพื้นที่ของบริษัท
+      <br><br>
+      <span class="highlight-text">เมื่อท่านกด "ยินยอมและดำเนินการต่อ" ถือว่าท่านได้อ่านและเข้าใจเงื่อนไขดังกล่าวแล้ว</span>
+    </div>
+    
+    <button class="consent-button" onclick="goToForm()">
+      ✅ ยินยอมและดำเนินการต่อ
+    </button>
+    
+    <div class="footer-info">
+      ระบบจัดการผู้เยี่ยมชม | RMT Corporation<br>
+      ข้อมูลของท่านจะได้รับการคุ้มครองตาม พ.ร.บ. PDPA 2562
+    </div>
   </div>
 
   <script>
     function goToForm() {
-      window.location.href = "register.html";
+      // Add loading effect
+      const button = document.querySelector('.consent-button');
+      const originalText = button.innerHTML;
+      button.innerHTML = '⏳ กำลังดำเนินการ...';
+      button.disabled = true;
+      
+      // Simulate loading and redirect
+      setTimeout(() => {
+        window.location.href = "register.html";
+      }, 800);
     }
+
+    // Add touch feedback for mobile
+    document.addEventListener('DOMContentLoaded', function() {
+      const button = document.querySelector('.consent-button');
+      
+      button.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.98)';
+      });
+      
+      button.addEventListener('touchend', function() {
+        this.style.transform = '';
+      });
+    });
   </script>
 </body>
 </html>
