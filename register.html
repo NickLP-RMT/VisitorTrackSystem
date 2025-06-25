@@ -439,19 +439,7 @@
       </button>
     </form>
   </div>
-
-    <div id="qrcode">
-      <div class="qr-title">
-        🎫 QR Code ของท่าน
-      </div>
-      <div id="qr-container"></div>
-      <div class="qr-message">
-        📱 โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่สแกน QR Code<br>
-        <strong>กรุณาเก็บหน้าจอนี้ไว้จนกว่าจะออกจากบริษัท</strong>
-      </div>
-    </div>
-  </div>
-
+    
   <script>
      document.getElementById('visitorForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -502,7 +490,10 @@
             title: 'QR Code ของคุณ',
             html: qrPopup,
             confirmButtonText: 'ปิด',
-            width: 350
+            width: 350,
+            customClass: {
+              confirmButton: 'swal2-confirm-custom'
+            }
           });
 
           submitBtn.innerHTML = '✅ สร้าง QR Code ใหม่';
@@ -516,15 +507,12 @@
       }, 600);
     });
 
-    // Add touch feedback for mobile
     document.addEventListener('DOMContentLoaded', function() {
       const buttons = document.querySelectorAll('button');
-      
       buttons.forEach(button => {
         button.addEventListener('touchstart', function() {
           this.style.transform = 'scale(0.98)';
         });
-        
         button.addEventListener('touchend', function() {
           if (!this.disabled) {
             this.style.transform = '';
@@ -532,23 +520,19 @@
         });
       });
 
-      // Auto-fill from previous data if available
       const savedData = sessionStorage.getItem('visitorData');
       if (savedData) {
         try {
           const data = JSON.parse(savedData);
-          // Don't auto-fill to maintain privacy, but could be used for convenience
         } catch (error) {
           console.log('No previous data found');
         }
       }
     });
 
-    // Prevent form submission on Enter key in input fields (except submit button)
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
         e.preventDefault();
-        // Move to next input
         const inputs = Array.from(document.querySelectorAll('input, select'));
         const currentIndex = inputs.indexOf(e.target);
         if (currentIndex < inputs.length - 1) {
@@ -556,6 +540,7 @@
         }
       }
     });
+  </script>
   </script>
 </body>
 </html>
