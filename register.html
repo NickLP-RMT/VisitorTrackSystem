@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ลงทะเบียนผู้มาติดต่อ - RMT Visitor Check-in</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -60,7 +60,8 @@
     #qrcode {
       margin-top: 30px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
     }
     @media screen and (max-width: 480px) {
       body {
@@ -136,14 +137,24 @@
 
       const qr = document.getElementById('qrcode');
       qr.innerHTML = '';
-      new QRCode(qr, {
-        text: JSON.stringify(data),
-        width: 220,
-        height: 220,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
-      });
+
+      if (qr) {
+        new QRCode(qr, {
+          text: JSON.stringify(data),
+          width: 220,
+          height: 220,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
+        });
+
+        const msg = document.createElement('p');
+        msg.textContent = '📱 โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่สแกน QR Code';
+        msg.style.marginTop = '12px';
+        msg.style.textAlign = 'center';
+        msg.style.fontWeight = 'bold';
+        qr.appendChild(msg);
+      }
     });
   </script>
 </body>
