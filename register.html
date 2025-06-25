@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ลงทะเบียนผู้มาติดต่อ - RMT Visitor Check-in</title>
   <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -139,8 +140,9 @@
       qr.innerHTML = '';
 
       if (qr) {
+        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(data));
         new QRCode(qr, {
-          text: JSON.stringify(data),
+          text: compressed,
           width: 220,
           height: 220,
           colorDark : "#000000",
