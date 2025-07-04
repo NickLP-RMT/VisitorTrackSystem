@@ -389,11 +389,29 @@
           <input type="text" id="company" placeholder="กรอกชื่อบริษัทหรือหน่วยงาน" required>
         </div>
 
-        <div class="form-group">
-          <label for="carPlate">ทะเบียนรถ</label>
-          <input type="text" id="carPlate" placeholder="เช่น กก 1234 กรุงเทพ (ถ้ามี)">
-        </div>
-      </div>
+        <div class="form-row">
+  <div class="form-group">
+    <label for="carPlate">ทะเบียนรถ</label>
+    <input type="text" id="carPlate" placeholder="เช่น กก 1234 กรุงเทพ (ถ้ามี)">
+  </div>
+
+  <div class="form-group">
+    <label for="followers">จำนวนผู้ติดตาม</label>
+    <select id="followers">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+  </div>
+</div>
 
       <div class="form-section">
         <div class="section-title">🎯 วัตถุประสงค์การเยี่ยมชม</div>
@@ -446,6 +464,7 @@
         fullName: document.getElementById('fullName').value.trim(),
         company: document.getElementById('company').value.trim(),
         carPlate: document.getElementById('carPlate').value.trim(),
+        followers: document.getElementById('followers').value,
         purpose: document.getElementById('purpose').value,
         contactPerson: document.getElementById('contactPerson').value.trim(),
         department: document.getElementById('department').value
