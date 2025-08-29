@@ -8,360 +8,89 @@
   <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:linear-gradient(135deg,#091f82 0%,#ffffff 100%);
+      min-height:100vh;padding:20px;color:#333;line-height:1.6;
     }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #091f82 0%, #ffffff 100%);
-      min-height: 100vh;
-      padding: 20px;
-      color: #333;
-      line-height: 1.6;
+    .header{
+      background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
+      width:100%;max-width:650px;margin:0 auto 20px;padding:20px;
+      border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.1)
     }
-
-    .header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      width: 100%;
-      max-width: 650px;
-      margin: 0 auto 20px;
-      padding: 20px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    .logo-section{margin-bottom:15px}
+    .company-name{font-size:24px;font-weight:700;color:#2c5282;margin-bottom:5px;letter-spacing:.5px}
+    .system-title{font-size:14px;color:#4a5568;font-weight:500;text-transform:uppercase;letter-spacing:1px}
+    .container{
+      width:100%;max-width:650px;margin:0 auto;background:rgba(255,255,255,.98);
+      backdrop-filter:blur(10px);padding:30px;border-radius:20px;
+      box-shadow:0 20px 40px rgba(0,0,0,.15);position:relative;overflow:hidden
     }
-
-    .logo-section {
-      margin-bottom: 15px;
+    .container::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#2c5282,#3182ce,#4299e1)}
+    .main-title{ text-align:center;color:#2c5282;margin-bottom:30px;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px }
+    .form-section{background:#f8fafc;padding:25px;border-radius:15px;margin-bottom:25px;border:1px solid #e2e8f0}
+    .section-title{font-size:16px;font-weight:600;color:#2d3748;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+    .form-group{margin-bottom:20px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px}
+    label{display:block;margin-bottom:8px;font-weight:600;font-size:14px;color:#2d3748}
+    .required{color:#e53e3e}
+    input,select{
+      width:100%;padding:12px 16px;border-radius:10px;border:2px solid #e2e8f0;
+      font-size:15px;transition:all .3s ease;background:#fff
     }
-
-    .company-name {
-      font-size: 24px;
-      font-weight: 700;
-      color: #2c5282;
-      margin-bottom: 5px;
-      letter-spacing: 0.5px;
+    input:focus,select:focus{outline:none;border-color:#3182ce;box-shadow:0 0 0 3px rgba(49,130,206,.1)}
+    input:invalid{border-color:#fc8181}
+    .row-inline{display:flex;align-items:center;gap:10px}
+    .muted{font-size:13px;color:#4a5568}
+    .total-pill{padding:8px 12px;border-radius:999px;background:#e6fffa;border:1px solid #81e6d9;color:#285e61;font-weight:700}
+    .submit-button{
+      width:100%;padding:16px 24px;font-size:16px;font-weight:600;
+      background:linear-gradient(135deg,#2c5282 0%,#3182ce 100%);
+      color:#fff;border:none;border-radius:12px;cursor:pointer;transition:all .3s ease;
+      box-shadow:0 4px 15px rgba(44,82,130,.3);margin-top:10px;letter-spacing:.3px
     }
-
-    .system-title {
-      font-size: 14px;
-      color: #4a5568;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .submit-button:hover{background:linear-gradient(135deg,#2a4c80 0%,#2c7cb8 100%);transform:translateY(-2px);box-shadow:0 6px 20px rgba(44,82,130,.4)}
+    .submit-button:active{transform:translateY(0)}
+    .submit-button:disabled{background:#a0aec0;cursor:not-allowed;transform:none;box-shadow:none}
+    .btn-secondary{
+      width:100%;padding:12px 20px;font-size:15px;font-weight:600;background:#edf2f7;color:#2d3748;
+      border:none;border-radius:10px;cursor:pointer;transition:.2s; margin-top:10px
     }
-
-    .container {
-      width: 100%;
-      max-width: 650px;
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(10px);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      position: relative;
-      overflow: hidden;
+    .btn-secondary:hover{background:#e2e8f0}
+    .back-button{
+      position:fixed;top:20px;left:20px;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);
+      border:none;padding:12px 16px;border-radius:50px;cursor:pointer;font-size:14px;font-weight:500;
+      color:#2c5282;transition:all .3s ease;box-shadow:0 4px 15px rgba(0,0,0,.1);z-index:1000
     }
-
-    .container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #2c5282, #3182ce, #4299e1);
+    .back-button:hover{background:#fff;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.15)}
+    /* Mobile */
+    @media (max-width:768px){
+      body{padding:15px}
+      .header{padding:15px;border-radius:15px;margin-bottom:15px}
+      .company-name{font-size:20px}
+      .system-title{font-size:12px}
+      .container{padding:25px 20px;border-radius:15px}
+      .main-title{font-size:20px;margin-bottom:25px}
+      .form-section{padding:20px 15px;border-radius:12px;margin-bottom:20px}
+      .form-row{grid-template-columns:1fr;gap:0}
+      .submit-button{padding:14px 20px;font-size:15px}
+      .back-button{top:15px;left:15px;padding:10px 14px;font-size:13px}
     }
-
-    .main-title {
-      text-align: center;
-      color: #2c5282;
-      margin-bottom: 30px;
-      font-size: 24px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+    @media (max-width:480px){
+      .header,.container{max-width:100%}
+      .main-title{font-size:18px}
+      .section-title{font-size:15px}
+      input,select{padding:10px 14px;font-size:14px}
     }
-
-    .form-section {
-      background: #f8fafc;
-      padding: 25px;
-      border-radius: 15px;
-      margin-bottom: 25px;
-      border: 1px solid #e2e8f0;
+    @supports(padding:max(0px)){
+      body{padding-top:max(20px,env(safe-area-inset-top));padding-bottom:max(20px,env(safe-area-inset-bottom))}
     }
-
-    .section-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #2d3748;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      font-size: 14px;
-      color: #2d3748;
-    }
-
-    .required {
-      color: #e53e3e;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: 2px solid #e2e8f0;
-      font-size: 15px;
-      transition: all 0.3s ease;
-      background: white;
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: #3182ce;
-      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
-    }
-
-    input:invalid {
-      border-color: #fc8181;
-    }
-
-    .submit-button {
-      width: 100%;
-      padding: 16px 24px;
-      font-size: 16px;
-      font-weight: 600;
-      background: linear-gradient(135deg, #2c5282 0%, #3182ce 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(44, 82, 130, 0.3);
-      margin-top: 10px;
-      text-transform: none;
-      letter-spacing: 0.3px;
-    }
-
-    .submit-button:hover {
-      background: linear-gradient(135deg, #2a4c80 0%, #2c7cb8 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(44, 82, 130, 0.4);
-    }
-
-    .submit-button:active {
-      transform: translateY(0);
-    }
-
-    .submit-button:disabled {
-      background: #a0aec0;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    #qrcode {
-      margin-top: 30px;
-      padding: 25px;
-      background: #f8fafc;
-      border-radius: 15px;
-      text-align: center;
-      border: 2px dashed #3182ce;
-      display: none;
-    }
-
-    #qrcode.show {
-      display: block;
-      animation: fadeInUp 0.5s ease-out;
-    }
-
-    .qr-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: #2c5282;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .qr-message {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #4a5568;
-      font-weight: 500;
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      border-left: 4px solid #3182ce;
-    }
-
-    .back-button {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(10px);
-      border: none;
-      padding: 12px 16px;
-      border-radius: 50px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      color: #2c5282;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
-
-    .back-button:hover {
-      background: rgba(255, 255, 255, 1);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-      body {
-        padding: 15px;
-      }
-
-      .header {
-        padding: 15px;
-        border-radius: 15px;
-        margin-bottom: 15px;
-      }
-
-      .company-name {
-        font-size: 20px;
-      }
-
-      .system-title {
-        font-size: 12px;
-      }
-
-      .container {
-        padding: 25px 20px;
-        border-radius: 15px;
-      }
-
-      .main-title {
-        font-size: 20px;
-        margin-bottom: 25px;
-      }
-
-      .form-section {
-        padding: 20px 15px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
-
-      .submit-button {
-        padding: 14px 20px;
-        font-size: 15px;
-      }
-
-      .back-button {
-        top: 15px;
-        left: 15px;
-        padding: 10px 14px;
-        font-size: 13px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .header, .container {
-        max-width: 100%;
-      }
-
-      .main-title {
-        font-size: 18px;
-      }
-
-      .section-title {
-        font-size: 15px;
-      }
-
-      input, select {
-        padding: 10px 14px;
-        font-size: 14px;
-      }
-    }
-
-    /* iOS safe area */
-    @supports (padding: max(0px)) {
-      body {
-        padding-top: max(20px, env(safe-area-inset-top));
-        padding-bottom: max(20px, env(safe-area-inset-bottom));
-      }
-    }
-
-    /* Animation */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .header, .container {
-      animation: fadeInUp 0.6s ease-out;
-    }
-
-    .container {
-      animation-delay: 0.2s;
-    }
-
-    /* Loading animation */
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 2px solid #ffffff;
-      border-radius: 50%;
-      border-top-color: transparent;
-      animation: spin 1s ease-in-out infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-   </style>
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    .header,.container{animation:fadeInUp .6s ease-out}.container{animation-delay:.2s}
+    .loading{display:inline-block;width:20px;height:20px;border:2px solid #fff;border-radius:50%;border-top-color:transparent;animation:spin 1s ease-in-out infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
 </head>
 <body>
   <button class="back-button" onclick="history.back()">← กลับ</button>
@@ -375,47 +104,45 @@
 
   <div class="container">
     <h2 class="main-title">📋 ลงทะเบียนผู้มาติดต่อ</h2>
+
     <form id="visitorForm" autocomplete="off">
       <div class="form-section">
         <div class="section-title">👤 ข้อมูลส่วนตัว</div>
-        
+
         <div class="form-group">
           <label for="fullName">ชื่อ-นามสกุล <span class="required">*</span></label>
-          <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุลของท่าน" required>
+          <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุลของท่าน" required minlength="2" maxlength="120">
         </div>
 
         <div class="form-group">
           <label for="company">บริษัทต้นสังกัด <span class="required">*</span></label>
-          <input type="text" id="company" placeholder="กรอกชื่อบริษัทหรือหน่วยงาน" required>
+          <input type="text" id="company" placeholder="กรอกชื่อบริษัทหรือหน่วยงาน" required minlength="2" maxlength="120">
         </div>
 
         <div class="form-row">
-  <div class="form-group">
-    <label for="carPlate">ทะเบียนรถ</label>
-    <input type="text" id="carPlate" placeholder="เช่น กก 1234">
-  </div>
+          <div class="form-group">
+            <label for="carPlate">ทะเบียนรถ</label>
+            <input type="text" id="carPlate" placeholder="เช่น กก 1234 / ABC 1234" inputmode="text" maxlength="12">
+            <div class="muted">* ไม่จำเป็นต้องกรอก</div>
+          </div>
 
-  <div class="form-group">
-    <label for="followers">จำนวนผู้ติดตาม</label>
-    <select id="followers">
-      <option value="0">0</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-    </select>
-  </div>
-</div>
+          <div class="form-group">
+            <label for="followers">จำนวนผู้ติดตาม</label>
+            <select id="followers">
+              <!-- 0-10 เหมือนเดิม + เผื่อไปถึง 20 -->
+              ${Array.from({length:21},(_,i)=>i).map(n=>`<option value="${n}">${n}</option>`).join('')}
+            </select>
+            <div class="row-inline muted" style="margin-top:8px">
+              <span>รวมทั้งหมด:</span>
+              <span id="totalPeople" class="total-pill">1 คน</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="form-section">
         <div class="section-title">🎯 วัตถุประสงค์การเยี่ยมชม</div>
-        
+
         <div class="form-row">
           <div class="form-group">
             <label for="purpose">วัตถุประสงค์ <span class="required">*</span></label>
@@ -426,6 +153,11 @@
               <option value="สมัครงาน">สมัครงาน</option>
               <option value="อื่น ๆ">อื่น ๆ</option>
             </select>
+          </div>
+
+          <div class="form-group" id="purposeOtherGroup" style="display:none">
+            <label for="purposeOther">ระบุวัตถุประสงค์ (ถ้าเลือกอื่น ๆ) <span class="required">*</span></label>
+            <input type="text" id="purposeOther" placeholder="ระบุวัตถุประสงค์เพิ่มเติม" maxlength="120">
           </div>
 
           <div class="form-group">
@@ -446,118 +178,238 @@
 
         <div class="form-group">
           <label for="contactPerson">เข้าพบ <span class="required">*</span></label>
-          <input type="text" id="contactPerson" placeholder="กรอกชื่อผู้ที่ต้องการเข้าพบ" required>
+          <input type="text" id="contactPerson" placeholder="กรอกชื่อผู้ที่ต้องการเข้าพบ" required minlength="2" maxlength="120">
+        </div>
+
+        <div class="form-group" style="margin-top:10px">
+          <label class="row-inline" style="font-weight:500">
+            <input type="checkbox" id="pdpaConsent" style="width:auto;margin-right:10px">
+            ฉันยินยอมให้บริษัทเก็บและใช้ข้อมูลตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) <span class="required" style="margin-left:6px">*</span>
+          </label>
+          <div class="muted" style="margin-top:6px">ข้อมูลจะถูกใช้เพื่อการลงทะเบียนและความปลอดภัยในการเข้า-ออกสถานที่</div>
         </div>
       </div>
 
-       <button type="submit" class="submit-button" id="submitBtn">
-        ✅ สร้าง QR Code
-      </button>
+      <button type="submit" class="submit-button" id="submitBtn">✅ สร้าง QR Code</button>
+      <button type="button" class="btn-secondary" id="resetBtn">ล้างฟอร์ม</button>
     </form>
   </div>
-    
+
   <script>
-     document.getElementById('visitorForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+    // ---------- Helpers ----------
+    const $ = (sel)=>document.querySelector(sel);
+    const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
 
-      const data = {
-        fullName: document.getElementById('fullName').value.trim(),
-        company: document.getElementById('company').value.trim(),
-        carPlate: document.getElementById('carPlate').value.trim(),
-        followers: document.getElementById('followers').value,
-        purpose: document.getElementById('purpose').value,
-        contactPerson: document.getElementById('contactPerson').value.trim(),
-        department: document.getElementById('department').value
+    function formatCarPlate(val){
+      // อัปเปอร์เคส + ตัดช่องว่างซ้ำ เหลือเว้นวรรคเดียว
+      val = val.toUpperCase().replace(/\s+/g,' ').trim();
+      // ไม่บังคับรูปแบบเข้มงวด แค่ให้สะอาดตา
+      return val;
+    }
+
+    function calcTotal(){
+      const followers = parseInt($('#followers').value || '0',10);
+      const total = 1 + followers;
+      $('#totalPeople').textContent = `${total} คน`;
+    }
+
+    function getFormData(){
+      const purposeValue = $('#purpose').value === 'อื่น ๆ'
+        ? ($('#purposeOther').value.trim() || 'อื่น ๆ')
+        : $('#purpose').value;
+
+      return {
+        fullName: $('#fullName').value.trim(),
+        company: $('#company').value.trim(),
+        carPlate: $('#carPlate').value.trim(),
+        followers: $('#followers').value,
+        purpose: purposeValue,
+        contactPerson: $('#contactPerson').value.trim(),
+        department: $('#department').value,
+        total: 1 + parseInt($('#followers').value || '0',10),
+        pdpa: $('#pdpaConsent').checked ? 'yes' : 'no',
+        ts: new Date().toISOString()
       };
+    }
 
-      if (!data.fullName || !data.company || !data.purpose || !data.contactPerson || !data.department) {
-        alert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน');
-        return;
+    function setLoading(isLoading){
+      const btn = $('#submitBtn');
+      if(isLoading){
+        btn.innerHTML = '<span class="loading"></span> กำลังสร้าง QR Code...';
+        btn.disabled = true;
+      }else{
+        btn.innerHTML = '✅ สร้าง QR Code ใหม่';
+        btn.disabled = false;
+      }
+    }
+
+    // ---------- Prefill (optional API lists) ----------
+    async function tryLoadOptions(){
+      // ถ้ามี API ฝั่ง backend ให้ลองโหลด; ถ้าไม่มีจะข้าม
+      try{
+        const p = await fetch('/api/purposes').then(r=>r.ok?r.json():null).catch(()=>null);
+        if(p && Array.isArray(p)){
+          const purpose = $('#purpose');
+          // เก็บค่าเดิมไว้ก่อน
+          const current = purpose.value;
+          purpose.innerHTML = '<option value="">-- กรุณาเลือก --</option>' + p.map(x=>`<option value="${x}">${x}</option>`).join('') + '<option value="อื่น ๆ">อื่น ๆ</option>';
+          if(current) purpose.value = current;
+        }
+      }catch{}
+      try{
+        const d = await fetch('/api/departments').then(r=>r.ok?r.json():null).catch(()=>null);
+        if(d && Array.isArray(d)){
+          const dep = $('#department');
+          const current = dep.value;
+          dep.innerHTML = '<option value="">-- กรุณาเลือก --</option>' + d.map(x=>`<option value="${x}">${x}</option>`).join('');
+          if(current) dep.value = current;
+        }
+      }catch{}
+    }
+
+    // ---------- Events ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      // ปุ่มสัมผัส
+      $$('button').forEach(b=>{
+        b.addEventListener('touchstart',function(){ this.style.transform='scale(0.98)'; });
+        b.addEventListener('touchend',function(){ if(!this.disabled) this.style.transform=''; });
+      });
+
+      // Followers -> Total
+      $('#followers').addEventListener('change', calcTotal);
+      calcTotal();
+
+      // Purpose other
+      $('#purpose').addEventListener('change', ()=>{
+        const showOther = $('#purpose').value === 'อื่น ๆ';
+        $('#purposeOtherGroup').style.display = showOther ? '' : 'none';
+        if(!showOther) $('#purposeOther').value = '';
+      });
+
+      // Car plate format
+      $('#carPlate').addEventListener('input', (e)=>{
+        const pos = e.target.selectionStart;
+        e.target.value = formatCarPlate(e.target.value);
+        e.target.setSelectionRange(pos, pos);
+      });
+
+      // Remember form (session)
+      const saved = sessionStorage.getItem('visitorFormData');
+      if(saved){
+        try{
+          const d = JSON.parse(saved);
+          if(d.fullName) $('#fullName').value = d.fullName;
+          if(d.company) $('#company').value = d.company;
+          if(d.carPlate) $('#carPlate').value = d.carPlate;
+          if(d.followers!=null) $('#followers').value = String(d.followers);
+          if(d.department) $('#department').value = d.department;
+          if(d.purpose){
+            $('#purpose').value = (['ติดต่องาน','ส่ง-รับของ','สมัครงาน','อื่น ๆ'].includes(d.purpose)) ? d.purpose : 'อื่น ๆ';
+            if($('#purpose').value==='อื่น ๆ'){ $('#purposeOtherGroup').style.display=''; $('#purposeOther').value = (['ติดต่องาน','ส่ง-รับของ','สมัครงาน','อื่น ๆ'].includes(d.purpose)?'':d.purpose); }
+          }
+          if(d.pdpa==='yes') $('#pdpaConsent').checked = true;
+          calcTotal();
+        }catch{}
       }
 
-      const submitBtn = document.getElementById('submitBtn');
-      const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<span class="loading"></span> กำลังสร้าง QR Code...';
-      submitBtn.disabled = true;
+      // โหลดตัวเลือกจาก API ถ้ามี
+      tryLoadOptions();
+    });
 
-      setTimeout(() => {
-        try {
+    // Enter -> next
+    document.addEventListener('keydown', function(e){
+      if(e.key==='Enter' && e.target.tagName==='INPUT'){
+        e.preventDefault();
+        const inputs = $$('#visitorForm input, #visitorForm select');
+        const idx = inputs.indexOf(e.target);
+        if(idx < inputs.length - 1){ inputs[idx+1].focus(); }
+      }
+    });
+
+    // Reset
+    $('#resetBtn').addEventListener('click', ()=>{
+      $('#visitorForm').reset();
+      $('#purposeOtherGroup').style.display='none';
+      $('#totalPeople').textContent = '1 คน';
+      sessionStorage.removeItem('visitorFormData');
+    });
+
+    // Submit
+    let submitting = false;
+    $('#visitorForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      if(submitting) return; // กันกดซ้ำ
+      const data = getFormData();
+
+      // Validations
+      if(!data.fullName || !data.company || !data.contactPerson || !data.department || !data.purpose){
+        Swal.fire({icon:'warning',title:'กรอกข้อมูลไม่ครบ',text:'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน'}); return;
+      }
+      if($('#purpose').value==='อื่น ๆ' && !$('#purposeOther').value.trim()){
+        Swal.fire({icon:'warning',title:'กรุณาระบุวัตถุประสงค์',text:'กรุณากรอกคำอธิบายสำหรับ “อื่น ๆ”'}); return;
+      }
+      if(!$('#pdpaConsent').checked){
+        Swal.fire({icon:'info',title:'ยังไม่ได้ยินยอม',text:'กรุณายินยอมตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) ก่อนดำเนินการต่อ'}); return;
+      }
+
+      // Save session
+      sessionStorage.setItem('visitorFormData', JSON.stringify(data));
+
+      submitting = true;
+      setLoading(true);
+
+      setTimeout(()=>{ // mock processing
+        try{
           const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(data));
-          const qrPopup = document.createElement('div');
-          qrPopup.innerHTML = `
-            <h3 style="margin-bottom: 16px; color: #2c5282;">📄 QR Code ผู้มาติดต่อ</h3>
-            <div id="qr-code-container"></div>
-            <p style="font-size: 13px; margin-top: 15px; color: #555;">
-              โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่รักษาความปลอดภัย<br>
-              กรุณาเก็บไว้จนกว่าจะออกจากบริษัท
-            </p>
+
+          // Prepare QR container
+          const wrap = document.createElement('div');
+          wrap.innerHTML = `
+            <h3 style="margin-bottom: 12px; color: #2c5282;">📄 QR Code ผู้มาติดต่อ</h3>
+            <div id="qr-code-container" style="display:flex;justify-content:center"></div>
+            <div style="font-size:13px;margin-top:12px;color:#555;background:#fff;padding:12px;border-radius:10px;border-left:4px solid #3182ce">
+              โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่รักษาความปลอดภัย และเก็บไว้จนกว่าจะออกจากบริษัท
+            </div>
           `;
 
-          const container = qrPopup.querySelector('#qr-code-container');
-          new QRCode(container, {
-            text: compressed,
-            width: 280,
-            height: 280,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
+          const container = wrap.querySelector('#qr-code-container');
+          const qr = new QRCode(container, {
+            text: compressed, width: 280, height: 280,
+            colorDark:"#000000", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H
           });
 
           Swal.fire({
             title: 'QR Code ของคุณ',
-            html: qrPopup,
+            html: wrap,
+            width: 360,
+            showDenyButton: true,
             confirmButtonText: 'ปิด',
-            width: 350,
-            customClass: {
-              confirmButton: 'swal2-confirm-custom'
+            denyButtonText: 'ดาวน์โหลด QR',
+            customClass:{ confirmButton:'swal2-confirm-custom' }
+          }).then(res=>{
+            if(res.isDenied){
+              // ดาวน์โหลดภาพ QR
+              try{
+                const img = container.querySelector('img') || container.querySelector('canvas');
+                const link = document.createElement('a');
+                link.download = `visitor_qr_${Date.now()}.png`;
+                link.href = (img.tagName==='CANVAS') ? img.toDataURL('image/png') : img.src;
+                link.click();
+              }catch(e){}
             }
           });
 
-          submitBtn.innerHTML = '✅ สร้าง QR Code ใหม่';
-          submitBtn.disabled = false;
-        } catch (err) {
+          setLoading(false);
+        }catch(err){
           console.error('QR Error:', err);
-          alert('เกิดข้อผิดพลาดในการสร้าง QR Code');
-          submitBtn.innerHTML = originalText;
-          submitBtn.disabled = false;
+          Swal.fire({icon:'error',title:'เกิดข้อผิดพลาด',text:'ไม่สามารถสร้าง QR Code ได้'});
+          $('#submitBtn').innerHTML = '✅ สร้าง QR Code';
+          $('#submitBtn').disabled = false;
+        }finally{
+          submitting = false;
         }
-      }, 600);
+      }, 500);
     });
-
-    document.addEventListener('DOMContentLoaded', function() {
-      const buttons = document.querySelectorAll('button');
-      buttons.forEach(button => {
-        button.addEventListener('touchstart', function() {
-          this.style.transform = 'scale(0.98)';
-        });
-        button.addEventListener('touchend', function() {
-          if (!this.disabled) {
-            this.style.transform = '';
-          }
-        });
-      });
-
-      const savedData = sessionStorage.getItem('visitorData');
-      if (savedData) {
-        try {
-          const data = JSON.parse(savedData);
-        } catch (error) {
-          console.log('No previous data found');
-        }
-      }
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
-        e.preventDefault();
-        const inputs = Array.from(document.querySelectorAll('input, select'));
-        const currentIndex = inputs.indexOf(e.target);
-        if (currentIndex < inputs.length - 1) {
-          inputs[currentIndex + 1].focus();
-        }
-      }
-    });
-  </script>
   </script>
 </body>
 </html>
