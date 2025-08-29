@@ -28,7 +28,7 @@
       box-shadow:0 20px 40px rgba(0,0,0,.15);position:relative;overflow:hidden
     }
     .container::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#2c5282,#3182ce,#4299e1)}
-    .main-title{ text-align:center;color:#2c5282;margin-bottom:30px;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px }
+    .main-title{text-align:center;color:#2c5282;margin-bottom:30px;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px}
     .form-section{background:#f8fafc;padding:25px;border-radius:15px;margin-bottom:25px;border:1px solid #e2e8f0}
     .section-title{font-size:16px;font-weight:600;color:#2d3748;margin-bottom:20px;display:flex;align-items:center;gap:8px}
     .form-group{margin-bottom:20px}
@@ -129,8 +129,17 @@
           <div class="form-group">
             <label for="followers">จำนวนผู้ติดตาม</label>
             <select id="followers">
-              <!-- 0-10 เหมือนเดิม + เผื่อไปถึง 20 -->
-              ${Array.from({length:21},(_,i)=>i).map(n=>`<option value="${n}">${n}</option>`).join('')}
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
             </select>
             <div class="row-inline muted" style="margin-top:8px">
               <span>รวมทั้งหมด:</span>
@@ -201,9 +210,7 @@
     const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
 
     function formatCarPlate(val){
-      // อัปเปอร์เคส + ตัดช่องว่างซ้ำ เหลือเว้นวรรคเดียว
       val = val.toUpperCase().replace(/\s+/g,' ').trim();
-      // ไม่บังคับรูปแบบเข้มงวด แค่ให้สะอาดตา
       return val;
     }
 
@@ -243,30 +250,6 @@
       }
     }
 
-    // ---------- Prefill (optional API lists) ----------
-    async function tryLoadOptions(){
-      // ถ้ามี API ฝั่ง backend ให้ลองโหลด; ถ้าไม่มีจะข้าม
-      try{
-        const p = await fetch('/api/purposes').then(r=>r.ok?r.json():null).catch(()=>null);
-        if(p && Array.isArray(p)){
-          const purpose = $('#purpose');
-          // เก็บค่าเดิมไว้ก่อน
-          const current = purpose.value;
-          purpose.innerHTML = '<option value="">-- กรุณาเลือก --</option>' + p.map(x=>`<option value="${x}">${x}</option>`).join('') + '<option value="อื่น ๆ">อื่น ๆ</option>';
-          if(current) purpose.value = current;
-        }
-      }catch{}
-      try{
-        const d = await fetch('/api/departments').then(r=>r.ok?r.json():null).catch(()=>null);
-        if(d && Array.isArray(d)){
-          const dep = $('#department');
-          const current = dep.value;
-          dep.innerHTML = '<option value="">-- กรุณาเลือก --</option>' + d.map(x=>`<option value="${x}">${x}</option>`).join('');
-          if(current) dep.value = current;
-        }
-      }catch{}
-    }
-
     // ---------- Events ----------
     document.addEventListener('DOMContentLoaded', () => {
       // ปุ่มสัมผัส
@@ -293,7 +276,7 @@
         e.target.setSelectionRange(pos, pos);
       });
 
-      // Remember form (session)
+      // Restore from session
       const saved = sessionStorage.getItem('visitorFormData');
       if(saved){
         try{
@@ -305,15 +288,15 @@
           if(d.department) $('#department').value = d.department;
           if(d.purpose){
             $('#purpose').value = (['ติดต่องาน','ส่ง-รับของ','สมัครงาน','อื่น ๆ'].includes(d.purpose)) ? d.purpose : 'อื่น ๆ';
-            if($('#purpose').value==='อื่น ๆ'){ $('#purposeOtherGroup').style.display=''; $('#purposeOther').value = (['ติดต่องาน','ส่ง-รับของ','สมัครงาน','อื่น ๆ'].includes(d.purpose)?'':d.purpose); }
+            if($('#purpose').value==='อื่น ๆ'){
+              $('#purposeOtherGroup').style.display='';
+              $('#purposeOther').value = (['ติดต่องาน','ส่ง-รับของ','สมัครงาน','อื่น ๆ'].includes(d.purpose)?'':d.purpose);
+            }
           }
           if(d.pdpa==='yes') $('#pdpaConsent').checked = true;
           calcTotal();
         }catch{}
       }
-
-      // โหลดตัวเลือกจาก API ถ้ามี
-      tryLoadOptions();
     });
 
     // Enter -> next
@@ -336,9 +319,9 @@
 
     // Submit
     let submitting = false;
-    $('#visitorForm').addEventListener('submit', async function(e){
+    $('#visitorForm').addEventListener('submit', function(e){
       e.preventDefault();
-      if(submitting) return; // กันกดซ้ำ
+      if(submitting) return;
       const data = getFormData();
 
       // Validations
@@ -362,10 +345,9 @@
         try{
           const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(data));
 
-          // Prepare QR container
           const wrap = document.createElement('div');
           wrap.innerHTML = `
-            <h3 style="margin-bottom: 12px; color: #2c5282;">📄 QR Code ผู้มาติดต่อ</h3>
+            <h3 style="margin-bottom:12px;color:#2c5282;">📄 QR Code ผู้มาติดต่อ</h3>
             <div id="qr-code-container" style="display:flex;justify-content:center"></div>
             <div style="font-size:13px;margin-top:12px;color:#555;background:#fff;padding:12px;border-radius:10px;border-left:4px solid #3182ce">
               โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่รักษาความปลอดภัย และเก็บไว้จนกว่าจะออกจากบริษัท
@@ -373,7 +355,7 @@
           `;
 
           const container = wrap.querySelector('#qr-code-container');
-          const qr = new QRCode(container, {
+          new QRCode(container, {
             text: compressed, width: 280, height: 280,
             colorDark:"#000000", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H
           });
@@ -385,10 +367,8 @@
             showDenyButton: true,
             confirmButtonText: 'ปิด',
             denyButtonText: 'ดาวน์โหลด QR',
-            customClass:{ confirmButton:'swal2-confirm-custom' }
           }).then(res=>{
             if(res.isDenied){
-              // ดาวน์โหลดภาพ QR
               try{
                 const img = container.querySelector('img') || container.querySelector('canvas');
                 const link = document.createElement('a');
