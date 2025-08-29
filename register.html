@@ -7,6 +7,7 @@
   <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{
@@ -363,16 +364,17 @@
 
           Swal.fire({
   title: 'QR Code ของคุณ',
-  html: wrap,
+  html: wrap,          // wrap คือ div ที่มีทั้งหัวข้อ + QR + ข้อความ
   width: 360,
   showDenyButton: true,
   confirmButtonText: 'ปิด',
-  denyButtonText: 'บันทึกรูปลงเครื่อง',
-}).then(async (res) => {
+  denyButtonText: 'บันทึกหน้าต่างเป็นรูป',
+}).then(async (res)=>{
   if (res.isDenied) {
-    await saveQrToDevice(container); // ⬅️ เรียกฟังก์ชันบันทึกรูป
+    await savePopupToDevice();  // ⬅️ บันทึกภาพทั้งป๊อปอัป
   }
 });
+
 
 
           setLoading(false);
@@ -467,6 +469,66 @@ function imgToCanvas(imgEl) {
       ctx.drawImage(imgEl, 0, 0, w, h);
       resolve(c);
     }
+  });
+}
+async function savePopupToDevice(){
+  const popup = Swal.getPopup();         // DOM ของป๊อปอัปทั้งหมด
+  if(!popup) return;
+
+  // เผื่อ QR ยังเรนเดอร์ไม่เสร็จ
+  await new Promise(r => setTimeout(r, 100));
+
+  // จับภาพทั้งป๊อปอัปเป็น Canvas (พื้นหลังขาว, ความคมชัดสูง)
+  const canvas = await html2canvas(popup, {
+    backgroundColor: '#ffffff',
+    scale: Math.max(2, window.devicePixelRatio || 1),
+    useCORS: true
+  });
+
+  await new Promise((resolve) => {
+    canvas.toBlob(async (blob) => {
+      if(!blob) return resolve();
+      const filename = `visitor_popup_${Date.now()}.png`;
+
+      // 1) ถ้าเครื่องรองรับ Web Share (Android Chrome ฯลฯ)
+      try {
+        const file = new File([blob], filename, { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Visitor QR',
+            text: 'บันทึกรูปหน้าต่าง QR ผู้มาติดต่อ',
+          });
+          return resolve();
+        }
+      } catch (_) { /* fallback */ }
+
+      // 2) ดาวน์โหลด (Android / Desktop)
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      const supportsDownload = 'download' in HTMLAnchorElement.prototype;
+
+      if (supportsDownload) {
+        document.body.appendChild(a); a.click();
+        setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
+        resolve();
+      } else {
+        // 3) iOS Safari: เปิดรูปในแท็บใหม่ → แตะค้างเพื่อ “บันทึกรูป”
+        const win = window.open('', '_blank');
+        if (win) {
+          const img = new Image();
+          img.src = url; img.style.maxWidth = '100%'; img.style.height = 'auto';
+          win.document.title = 'Visitor QR';
+          win.document.body.style.margin = '0';
+          win.document.body.style.display = 'flex';
+          win.document.body.style.justifyContent = 'center';
+          win.document.body.style.alignItems = 'center';
+          win.document.body.appendChild(img);
+        }
+        resolve();
+      }
+    }, 'image/png');
   });
 }
 
