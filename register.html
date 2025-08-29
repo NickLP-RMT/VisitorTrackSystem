@@ -37,7 +37,7 @@
     .required{color:#e53e3e}
     input,select{
       width:100%;padding:12px 16px;border-radius:10px;border:2px solid #e2e8f0;
-      font-size:15px;transition:all .3s ease;background:#fff
+      font-size:15px;transition:all .3s.ease;background:#fff
     }
     input:focus,select:focus{outline:none;border-color:#3182ce;box-shadow:0 0 0 3px rgba(49,130,206,.1)}
     input:invalid{border-color:#fc8181}
@@ -121,11 +121,9 @@
 
         <div class="form-row">
           <div class="form-group">
-  <label for="carPlate">ทะเบียนรถ <span class="required">*</span></label>
-  <input type="text" id="carPlate" placeholder="เช่น กก 1234 / ABC 1234"
-         inputmode="text" maxlength="12" required>
-</div>
-
+            <label for="carPlate">ทะเบียนรถ <span class="required">*</span></label>
+            <input type="text" id="carPlate" placeholder="เช่น กก 1234 / ABC 1234" inputmode="text" maxlength="12" required>
+          </div>
 
           <div class="form-group">
             <label for="followers">จำนวนผู้ติดตาม</label>
@@ -361,23 +359,14 @@
             colorDark:"#000000", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H
           });
 
+          // ❗ เหลือแค่ปุ่ม "ปิด" อย่างเดียว
           Swal.fire({
             title: 'QR Code ของคุณ',
             html: wrap,
             width: 360,
-            showDenyButton: true,
+            showConfirmButton: true,
             confirmButtonText: 'ปิด',
-            denyButtonText: 'ดาวน์โหลด QR',
-          }).then(res=>{
-            if(res.isDenied){
-              try{
-                const img = container.querySelector('img') || container.querySelector('canvas');
-                const link = document.createElement('a');
-                link.download = `visitor_qr_${Date.now()}.png`;
-                link.href = (img.tagName==='CANVAS') ? img.toDataURL('image/png') : img.src;
-                link.click();
-              }catch(e){}
-            }
+            showDenyButton: false
           });
 
           setLoading(false);
