@@ -362,23 +362,18 @@
           });
 
           Swal.fire({
-            title: 'QR Code ของคุณ',
-            html: wrap,
-            width: 360,
-            showDenyButton: true,
-            confirmButtonText: 'ปิด',
-            denyButtonText: 'ดาวน์โหลด QR',
-          }).then(res=>{
-            if(res.isDenied){
-              try{
-                const img = container.querySelector('img') || container.querySelector('canvas');
-                const link = document.createElement('a');
-                link.download = `visitor_qr_${Date.now()}.png`;
-                link.href = (img.tagName==='CANVAS') ? img.toDataURL('image/png') : img.src;
-                link.click();
-              }catch(e){}
-            }
-          });
+  title: 'QR Code ของคุณ',
+  html: wrap,
+  width: 360,
+  showDenyButton: true,
+  confirmButtonText: 'ปิด',
+  denyButtonText: 'บันทึกรูปลงเครื่อง',
+}).then(async (res) => {
+  if (res.isDenied) {
+    await saveQrToDevice(container); // ⬅️ เรียกฟังก์ชันบันทึกรูป
+  }
+});
+
 
           setLoading(false);
         }catch(err){
@@ -391,6 +386,90 @@
         }
       }, 500);
     });
+
+    async function saveQrToDevice(container) {
+  const node = container.querySelector('img, canvas');
+  if (!node) return;
+
+  // แปลงเป็น Canvas เสมอ เพื่อความแน่นอน
+  const canvas = node.tagName === 'CANVAS' ? node : await imgToCanvas(node);
+
+  await new Promise((resolve) => {
+    canvas.toBlob(async (blob) => {
+      if (!blob) return resolve();
+
+      const filename = `visitor_qr_${Date.now()}.png`;
+
+      // 1) มือถือที่รองรับ Web Share (เช่น Android Chrome รุ่นใหม่)
+      try {
+        const file = new File([blob], filename, { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Visitor QR',
+            text: 'บันทึกรูป QR Code ผู้มาติดต่อ',
+          });
+          return resolve();
+        }
+      } catch (e) {
+        // continue to fallback
+      }
+
+      // 2) ดาวน์โหลดไฟล์ (รองรับส่วนใหญ่บน Android/เดสก์ท็อป)
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+
+      // ถ้าบราวเซอร์ไม่รองรับ download attribute (เช่น iOS Safari)
+      const supportsDownload = 'download' in HTMLAnchorElement.prototype;
+
+      if (supportsDownload) {
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+          a.remove();
+        }, 0);
+        resolve();
+      } else {
+        // 3) iOS Safari: เปิดรูปในแท็บใหม่ ให้ผู้ใช้แตะค้างเพื่อ "บันทึกรูป"
+        const win = window.open('', '_blank');
+        if (win) {
+          const img = new Image();
+          img.src = url;
+          img.style.maxWidth = '100%';
+          img.style.height = 'auto';
+          win.document.title = 'Visitor QR';
+          win.document.body.style.margin = '0';
+          win.document.body.style.display = 'flex';
+          win.document.body.style.justifyContent = 'center';
+          win.document.body.style.alignItems = 'center';
+          win.document.body.appendChild(img);
+        }
+        resolve();
+      }
+    }, 'image/png');
+  });
+}
+
+function imgToCanvas(imgEl) {
+  return new Promise((resolve) => {
+    const c = document.createElement('canvas');
+    const w = imgEl.naturalWidth || 280;
+    const h = imgEl.naturalHeight || 280;
+    c.width = w; c.height = h;
+    const ctx = c.getContext('2d');
+    // เผื่อกรณีรูปยังโหลดไม่เสร็จ
+    if (!imgEl.complete) {
+      imgEl.onload = () => { ctx.drawImage(imgEl, 0, 0, w, h); resolve(c); };
+    } else {
+      ctx.drawImage(imgEl, 0, 0, w, h);
+      resolve(c);
+    }
+  });
+}
+
   </script>
 </body>
 </html>
