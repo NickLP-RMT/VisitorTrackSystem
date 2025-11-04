@@ -128,6 +128,14 @@
     white-space: nowrap;
   }
 }
+.company-logo {
+  display: block;
+  margin: 10px auto 0; /* เว้นห่างเล็กน้อยจากข้อความ */
+  width: 80px;         /* ปรับขนาดโลโก้พอดี */
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+}
 
 
   </style>
@@ -135,11 +143,13 @@
 <body>
   <button class="back-button" onclick="history.back()">← กลับ</button>
 
-  <div class="header">
+<div class="header">
   <div class="logo-section">
     <div class="company-name">RMT Visitor Track System</div>
+    <img src="logo.png" alt="Company Logo" class="company-logo">
   </div>
 </div>
+
 
 
   <div class="container">
