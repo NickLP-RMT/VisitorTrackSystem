@@ -11,21 +11,37 @@
     *{margin:0;padding:0;box-sizing:border-box}
     body{
       font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-      background:linear-gradient(135deg,#091f82 0%,#ffffff 100%);
+      background: linear-gradient(135deg, #0097B2 0%, #00C2A8 100%)
       min-height:100vh;padding:20px;color:#333;line-height:1.6;
     }
-    .header{
-  background:#fff;
-  width:100%;
-  max-width:650px;
-  margin:0 auto 20px;
-  padding:20px;
-  border-radius:20px;
-  text-align:center;
-  box-shadow:0 4px 15px rgba(0,0,0,.1);
-  position:relative; /* ให้เลื่อนตามเนื้อหาได้ */
-  backdrop-filter:none; /* ปิด blur */
+  .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: none;
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 20px 20px;
 }
+.container {
+  width: 100%;
+  max-width: 650px;
+  margin: 140px auto 0; /* เพิ่มระยะจาก header */
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
     .logo-section{margin-bottom:15px}
     .company-name{font-size:24px;font-weight:700;color:#2c5282;margin-bottom:5px;letter-spacing:.5px}
     .system-title{font-size:14px;color:#4a5568;font-weight:500;text-transform:uppercase;letter-spacing:1px}
