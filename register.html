@@ -110,6 +110,21 @@
         </div>
 
         <div class="form-group">
+  <label for="phone">เบอร์โทรศัพท์ <span class="required">*</span></label>
+  <input 
+    type="tel" 
+    id="phone" 
+    placeholder="กรอกเฉพาะตัวเลข 9–10 หลัก" 
+    pattern="[0-9]{9,10}" 
+    required 
+    maxlength="10" 
+    inputmode="numeric"
+    oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+</div>
+
+
+
+        <div class="form-group">
           <label for="company">บริษัทต้นสังกัด <span class="required">*</span></label>
           <input type="text" id="company" placeholder="กรอกชื่อบริษัทหรือหน่วยงาน" required minlength="2" maxlength="120">
         </div>
@@ -215,6 +230,7 @@
 
       return {
         fullName: $('#fullName').value.trim(),
+        phone: $('#phone').value.trim(),
         company: $('#company').value.trim(),
         carPlate: $('#carPlate').value.trim(),
         followers: $('#followers').value,
@@ -260,7 +276,7 @@
       if(submitting) return;
       const data = getFormData();
 
-      if(!data.fullName || !data.company || !data.contactPerson || !data.department || !data.purpose)
+      if(!data.fullName || !data.phone || !data.company || !data.contactPerson || !data.department || !data.purpose)
         return Swal.fire({icon:'warning',title:'กรอกข้อมูลไม่ครบ',text:'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน'});
       if($('#purpose').value==='อื่น ๆ' && !$('#purposeOther').value.trim())
         return Swal.fire({icon:'warning',title:'กรุณาระบุวัตถุประสงค์',text:'กรุณากรอกคำอธิบายสำหรับ “อื่น ๆ”'});
