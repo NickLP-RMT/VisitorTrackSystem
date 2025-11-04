@@ -66,12 +66,24 @@
     .loading{display:inline-block;width:20px;height:20px;border:2px solid #fff;border-radius:50%;border-top-color:transparent;animation:spin 1s ease-in-out infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    @media (max-width:768px){
-  .form-row{grid-template-columns:1fr;gap:0}
-  .form-group{margin-bottom:15px;}
-  .form-group:last-child{margin-bottom:0}
-  #followers{min-height:48px;}
+/* 📱 ปรับความสูง input/select ให้เท่ากันในมือถือ */
+@media (max-width: 768px) {
+  input, select {
+    height: 48px;
+    line-height: 48px;
+  }
+  .row-inline {
+    align-items: center;
+  }
+  #followers {
+    flex: 1;
+  }
+  #totalPeople {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
 }
+
 
   </style>
 </head>
