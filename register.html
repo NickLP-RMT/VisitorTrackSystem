@@ -52,7 +52,6 @@
     }
     .submit-button:hover{background:linear-gradient(135deg,#2a4c80 0%,#2c7cb8 100%);transform:translateY(-2px);box-shadow:0 6px 20px rgba(44,82,130,.4)}
     .submit-button:active{transform:translateY(0)}
-    .submit-button:disabled{background:#a0aec0;cursor:not-allowed;transform:none;box-shadow:none}
     .btn-secondary{
       width:100%;padding:12px 20px;font-size:15px;font-weight:600;background:#edf2f7;color:#2d3748;
       border:none;border-radius:10px;cursor:pointer;transition:.2s; margin-top:10px
@@ -64,30 +63,6 @@
       color:#2c5282;transition:all .3s ease;box-shadow:0 4px 15px rgba(0,0,0,.1);z-index:1000
     }
     .back-button:hover{background:#fff;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.15)}
-    /* Mobile */
-    @media (max-width:768px){
-      body{padding:15px}
-      .header{padding:15px;border-radius:15px;margin-bottom:15px}
-      .company-name{font-size:20px}
-      .system-title{font-size:12px}
-      .container{padding:25px 20px;border-radius:15px}
-      .main-title{font-size:20px;margin-bottom:25px}
-      .form-section{padding:20px 15px;border-radius:12px;margin-bottom:20px}
-      .form-row{grid-template-columns:1fr;gap:0}
-      .submit-button{padding:14px 20px;font-size:15px}
-      .back-button{top:15px;left:15px;padding:10px 14px;font-size:13px}
-    }
-    @media (max-width:480px){
-      .header,.container{max-width:100%}
-      .main-title{font-size:18px}
-      .section-title{font-size:15px}
-      input,select{padding:10px 14px;font-size:14px}
-    }
-    @supports(padding:max(0px)){
-      body{padding-top:max(20px,env(safe-area-inset-top));padding-bottom:max(20px,env(safe-area-inset-bottom))}
-    }
-    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-    .header,.container{animation:fadeInUp .6s ease-out}.container{animation-delay:.2s}
     .loading{display:inline-block;width:20px;height:20px;border:2px solid #fff;border-radius:50%;border-top-color:transparent;animation:spin 1s ease-in-out infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
   </style>
@@ -157,7 +132,8 @@
             <select id="purpose" required>
               <option value="">-- กรุณาเลือก --</option>
               <option value="ติดต่องาน">ติดต่องาน</option>
-              <option value="ส่ง-รับของ">ส่ง-รับของ</option>
+              <option value="ส่ง/รับเอกสาร">ส่ง/รับเอกสาร</option>
+              <option value="ส่ง/รับสินค้า">ส่ง/รับสินค้า</option>
               <option value="สมัครงาน">สมัครงาน</option>
               <option value="อื่น ๆ">อื่น ๆ</option>
             </select>
@@ -174,14 +150,14 @@
               <option value="">-- กรุณาเลือก --</option>
               <option value="PD">PD</option>
               <option value="PC">PC</option>
-              <option value="PC">PE</option>
+              <option value="PE">PE</option>
               <option value="QA/QC">QA/QC</option>
               <option value="Design">Design</option>
               <option value="ซ่อมบำรุง">ซ่อมบำรุง</option>
               <option value="จัดซื้อ">จัดซื้อ</option>
               <option value="บุคคล">บุคคล</option>
               <option value="บัญชี">บัญชี</option>
-              <option value="บัญชี">Safty</option>
+              <option value="Safty">Safety</option>
               <option value="IT">IT</option>
             </select>
           </div>
@@ -191,14 +167,6 @@
           <label for="contactPerson">เข้าพบ <span class="required">*</span></label>
           <input type="text" id="contactPerson" placeholder="กรอกชื่อผู้ที่ต้องการเข้าพบ" required minlength="2" maxlength="120">
         </div>
-
-        <div class="form-group" style="margin-top:10px">
-          <label class="row-inline" style="font-weight:500">
-            <input type="checkbox" id="pdpaConsent" style="width:auto;margin-right:10px">
-            ฉันยินยอมให้บริษัทเก็บและใช้ข้อมูลตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) <span class="required" style="margin-left:6px">*</span>
-          </label>
-          <div class="muted" style="margin-top:6px">ข้อมูลจะถูกใช้เพื่อการลงทะเบียนและความปลอดภัยในการเข้า-ออกสถานที่</div>
-        </div>
       </div>
 
       <button type="submit" class="submit-button" id="submitBtn">✅ สร้าง QR Code</button>
@@ -207,19 +175,16 @@
   </div>
 
   <script>
-    // ---------- Helpers ----------
-    const $ = (sel)=>document.querySelector(sel);
-    const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
+    const $ = s=>document.querySelector(s);
+    const $$ = s=>document.querySelectorAll(s);
 
     function formatCarPlate(val){
-      val = val.toUpperCase().replace(/\s+/g,' ').trim();
-      return val;
+      return val.toUpperCase().replace(/\s+/g,' ').trim();
     }
 
     function calcTotal(){
       const followers = parseInt($('#followers').value || '0',10);
-      const total = 1 + followers;
-      $('#totalPeople').textContent = `${total} คน`;
+      $('#totalPeople').textContent = `${1+followers} คน`;
     }
 
     function getFormData(){
@@ -236,7 +201,6 @@
         contactPerson: $('#contactPerson').value.trim(),
         department: $('#department').value,
         total: 1 + parseInt($('#followers').value || '0',10),
-        pdpa: $('#pdpaConsent').checked ? 'yes' : 'no',
         ts: new Date().toISOString()
       };
     }
@@ -252,136 +216,55 @@
       }
     }
 
-    // ---------- Events ----------
-    document.addEventListener('DOMContentLoaded', () => {
-      // ปุ่มสัมผัส
-      $$('button').forEach(b=>{
-        b.addEventListener('touchstart',function(){ this.style.transform='scale(0.98)'; });
-        b.addEventListener('touchend',function(){ if(!this.disabled) this.style.transform=''; });
-      });
-
-      // Followers -> Total
+    document.addEventListener('DOMContentLoaded', ()=>{
       $('#followers').addEventListener('change', calcTotal);
       calcTotal();
-
-      // Purpose other
-      $('#purpose').addEventListener('change', ()=>{
-        const showOther = $('#purpose').value === 'อื่น ๆ';
-        $('#purposeOtherGroup').style.display = showOther ? '' : 'none';
-        if(!showOther) $('#purposeOther').value = '';
-      });
-
-      // Car plate format
-      $('#carPlate').addEventListener('input', (e)=>{
+      $('#purpose').addEventListener('change', ()=>{$('#purposeOtherGroup').style.display=$('#purpose').value==='อื่น ๆ'?'':'none';});
+      $('#carPlate').addEventListener('input', e=>{
         const pos = e.target.selectionStart;
         e.target.value = formatCarPlate(e.target.value);
         e.target.setSelectionRange(pos, pos);
       });
-
-      // Restore from session
-      const saved = sessionStorage.getItem('visitorFormData');
-      if(saved){
-        try{
-          const d = JSON.parse(saved);
-          if(d.fullName) $('#fullName').value = d.fullName;
-          if(d.company) $('#company').value = d.company;
-          if(d.carPlate) $('#carPlate').value = d.carPlate;
-          if(d.followers!=null) $('#followers').value = String(d.followers);
-          if(d.department) $('#department').value = d.department;
-          if(d.purpose){
-            $('#purpose').value = (['ติดต่องาน','ส่ง-รับของ','สมัครงาน','อื่น ๆ'].includes(d.purpose)) ? d.purpose : 'อื่น ๆ';
-            if($('#purpose').value==='อื่น ๆ'){
-              $('#purposeOtherGroup').style.display='';
-              $('#purposeOther').value = (['ติดต่องาน','ส่ง-รับของ','สมัครงาน','อื่น ๆ'].includes(d.purpose)?'':d.purpose);
-            }
-          }
-          if(d.pdpa==='yes') $('#pdpaConsent').checked = true;
-          calcTotal();
-        }catch{}
-      }
     });
 
-    // Enter -> next
-    document.addEventListener('keydown', function(e){
-      if(e.key==='Enter' && e.target.tagName==='INPUT'){
-        e.preventDefault();
-        const inputs = $$('#visitorForm input, #visitorForm select');
-        const idx = inputs.indexOf(e.target);
-        if(idx < inputs.length - 1){ inputs[idx+1].focus(); }
-      }
-    });
-
-    // Reset
     $('#resetBtn').addEventListener('click', ()=>{
       $('#visitorForm').reset();
       $('#purposeOtherGroup').style.display='none';
-      $('#totalPeople').textContent = '1 คน';
-      sessionStorage.removeItem('visitorFormData');
+      $('#totalPeople').textContent='1 คน';
     });
 
-    // Submit
     let submitting = false;
-    $('#visitorForm').addEventListener('submit', function(e){
+    $('#visitorForm').addEventListener('submit', e=>{
       e.preventDefault();
       if(submitting) return;
       const data = getFormData();
 
-      // Validations
-      if(!data.fullName || !data.company || !data.contactPerson || !data.department || !data.purpose){
-        Swal.fire({icon:'warning',title:'กรอกข้อมูลไม่ครบ',text:'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน'}); return;
-      }
-      if($('#purpose').value==='อื่น ๆ' && !$('#purposeOther').value.trim()){
-        Swal.fire({icon:'warning',title:'กรุณาระบุวัตถุประสงค์',text:'กรุณากรอกคำอธิบายสำหรับ “อื่น ๆ”'}); return;
-      }
-      if(!$('#pdpaConsent').checked){
-        Swal.fire({icon:'info',title:'ยังไม่ได้ยินยอม',text:'กรุณายินยอมตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) ก่อนดำเนินการต่อ'}); return;
-      }
-
-      // Save session
-      sessionStorage.setItem('visitorFormData', JSON.stringify(data));
+      if(!data.fullName || !data.company || !data.contactPerson || !data.department || !data.purpose)
+        return Swal.fire({icon:'warning',title:'กรอกข้อมูลไม่ครบ',text:'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน'});
+      if($('#purpose').value==='อื่น ๆ' && !$('#purposeOther').value.trim())
+        return Swal.fire({icon:'warning',title:'กรุณาระบุวัตถุประสงค์',text:'กรุณากรอกคำอธิบายสำหรับ “อื่น ๆ”'});
 
       submitting = true;
       setLoading(true);
-
-      setTimeout(()=>{ // mock processing
+      setTimeout(()=>{
         try{
           const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(data));
-
           const wrap = document.createElement('div');
           wrap.innerHTML = `
             <div id="qr-code-container" style="display:flex;justify-content:center"></div>
             <div style="font-size:13px;margin-top:12px;color:red;background:#fff;padding:12px">
-  โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่รักษาความปลอดภัย และสามารถแคปหน้าจอไว้ใช้งานครั้งหน้า
-</div>
-
-          `;
-
-          const container = wrap.querySelector('#qr-code-container');
-          new QRCode(container, {
-            text: compressed, width: 280, height: 280,
-            colorDark:"#000000", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H
-          });
-
-          // ❗ เหลือแค่ปุ่ม "ปิด" อย่างเดียว
-          Swal.fire({
-            title: 'QR Code ของคุณ',
-            html: wrap,
-            width: 360,
-            showConfirmButton: true,
-            confirmButtonText: 'ปิด',
-            showDenyButton: false
-          });
-
-          setLoading(false);
+              📸 โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่รักษาความปลอดภัย
+            </div>`;
+          new QRCode(wrap.querySelector('#qr-code-container'),{text:compressed,width:280,height:280,colorDark:"#000",colorLight:"#fff",correctLevel:QRCode.CorrectLevel.H});
+          Swal.fire({title:'QR Code ของคุณ',html:wrap,width:360,confirmButtonText:'ปิด'});
         }catch(err){
-          console.error('QR Error:', err);
+          console.error(err);
           Swal.fire({icon:'error',title:'เกิดข้อผิดพลาด',text:'ไม่สามารถสร้าง QR Code ได้'});
-          $('#submitBtn').innerHTML = '✅ สร้าง QR Code';
-          $('#submitBtn').disabled = false;
         }finally{
-          submitting = false;
+          submitting=false;
+          setLoading(false);
         }
-      }, 500);
+      },500);
     });
   </script>
 </body>
