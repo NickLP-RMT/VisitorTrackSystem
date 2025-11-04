@@ -19,6 +19,7 @@
       width:100%;max-width:650px;margin:0 auto 20px;padding:20px;
       border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.1)
     }
+    .logo-section{margin-bottom:15px}
     .company-name{font-size:24px;font-weight:700;color:#2c5282;margin-bottom:5px;letter-spacing:.5px}
     .system-title{font-size:14px;color:#4a5568;font-weight:500;text-transform:uppercase;letter-spacing:1px}
     .container{
@@ -27,28 +28,30 @@
       box-shadow:0 20px 40px rgba(0,0,0,.15);position:relative;overflow:hidden
     }
     .container::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#2c5282,#3182ce,#4299e1)}
-    .main-title{text-align:center;color:#2c5282;margin-bottom:30px;font-size:24px;font-weight:600}
+    .main-title{text-align:center;color:#2c5282;margin-bottom:30px;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px}
     .form-section{background:#f8fafc;padding:25px;border-radius:15px;margin-bottom:25px;border:1px solid #e2e8f0}
-    .section-title{font-size:16px;font-weight:600;color:#2d3748;margin-bottom:20px}
+    .section-title{font-size:16px;font-weight:600;color:#2d3748;margin-bottom:20px;display:flex;align-items:center;gap:8px}
     .form-group{margin-bottom:20px}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px}
     label{display:block;margin-bottom:8px;font-weight:600;font-size:14px;color:#2d3748}
     .required{color:#e53e3e}
     input,select{
       width:100%;padding:12px 16px;border-radius:10px;border:2px solid #e2e8f0;
-      font-size:15px;transition:all .3s ease;background:#fff
+      font-size:15px;transition:all .3s.ease;background:#fff
     }
     input:focus,select:focus{outline:none;border-color:#3182ce;box-shadow:0 0 0 3px rgba(49,130,206,.1)}
+    input:invalid{border-color:#fc8181}
     .row-inline{display:flex;align-items:center;gap:10px}
     .muted{font-size:13px;color:#4a5568}
     .total-pill{padding:8px 12px;border-radius:999px;background:#e6fffa;border:1px solid #81e6d9;color:#285e61;font-weight:700}
     .submit-button{
       width:100%;padding:16px 24px;font-size:16px;font-weight:600;
       background:linear-gradient(135deg,#2c5282 0%,#3182ce 100%);
-      color:#fff;border:none;border-radius:12px;cursor:pointer;transition:.3s;
-      box-shadow:0 4px 15px rgba(44,82,130,.3);margin-top:10px;
+      color:#fff;border:none;border-radius:12px;cursor:pointer;transition:all .3s ease;
+      box-shadow:0 4px 15px rgba(44,82,130,.3);margin-top:10px;letter-spacing:.3px
     }
-    .submit-button:hover{background:linear-gradient(135deg,#2a4c80 0%,#2c7cb8 100%);transform:translateY(-2px)}
+    .submit-button:hover{background:linear-gradient(135deg,#2a4c80 0%,#2c7cb8 100%);transform:translateY(-2px);box-shadow:0 6px 20px rgba(44,82,130,.4)}
+    .submit-button:active{transform:translateY(0)}
     .submit-button:disabled{background:#a0aec0;cursor:not-allowed;transform:none;box-shadow:none}
     .btn-secondary{
       width:100%;padding:12px 20px;font-size:15px;font-weight:600;background:#edf2f7;color:#2d3748;
@@ -61,16 +64,42 @@
       color:#2c5282;transition:all .3s ease;box-shadow:0 4px 15px rgba(0,0,0,.1);z-index:1000
     }
     .back-button:hover{background:#fff;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.15)}
+    /* Mobile */
+    @media (max-width:768px){
+      body{padding:15px}
+      .header{padding:15px;border-radius:15px;margin-bottom:15px}
+      .company-name{font-size:20px}
+      .system-title{font-size:12px}
+      .container{padding:25px 20px;border-radius:15px}
+      .main-title{font-size:20px;margin-bottom:25px}
+      .form-section{padding:20px 15px;border-radius:12px;margin-bottom:20px}
+      .form-row{grid-template-columns:1fr;gap:0}
+      .submit-button{padding:14px 20px;font-size:15px}
+      .back-button{top:15px;left:15px;padding:10px 14px;font-size:13px}
+    }
+    @media (max-width:480px){
+      .header,.container{max-width:100%}
+      .main-title{font-size:18px}
+      .section-title{font-size:15px}
+      input,select{padding:10px 14px;font-size:14px}
+    }
+    @supports(padding:max(0px)){
+      body{padding-top:max(20px,env(safe-area-inset-top));padding-bottom:max(20px,env(safe-area-inset-bottom))}
+    }
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    .header,.container{animation:fadeInUp .6s ease-out}.container{animation-delay:.2s}
+    .loading{display:inline-block;width:20px;height:20px;border:2px solid #fff;border-radius:50%;border-top-color:transparent;animation:spin 1s ease-in-out infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
-    .loading{display:inline-block;width:20px;height:20px;border:2px solid #fff;border-radius:50%;border-top-color:transparent;animation:spin 1s linear infinite}
   </style>
 </head>
 <body>
   <button class="back-button" onclick="history.back()">← กลับ</button>
 
   <div class="header">
-    <div class="company-name">Resonac Materials (Thailand) Co., Ltd.</div>
-    <div class="system-title">Visitor Registration System</div>
+    <div class="logo-section">
+      <div class="company-name">Resonac Materials (Thailand) Co., Ltd.</div>
+      <div class="system-title">Visitor Registration System</div>
+    </div>
   </div>
 
   <div class="container">
@@ -82,18 +111,18 @@
 
         <div class="form-group">
           <label for="fullName">ชื่อ-นามสกุล <span class="required">*</span></label>
-          <input type="text" id="fullName" required minlength="2" maxlength="120" placeholder="กรอกชื่อ-นามสกุลของท่าน">
+          <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุลของท่าน" required minlength="2" maxlength="120">
         </div>
 
         <div class="form-group">
           <label for="company">บริษัทต้นสังกัด <span class="required">*</span></label>
-          <input type="text" id="company" required minlength="2" maxlength="120" placeholder="กรอกชื่อบริษัทหรือหน่วยงาน">
+          <input type="text" id="company" placeholder="กรอกชื่อบริษัทหรือหน่วยงาน" required minlength="2" maxlength="120">
         </div>
 
         <div class="form-row">
           <div class="form-group">
             <label for="carPlate">ทะเบียนรถ <span class="required">*</span></label>
-            <input type="text" id="carPlate" maxlength="12" placeholder="เช่น กก 1234 / ABC 1234" required>
+            <input type="text" id="carPlate" placeholder="เช่น กก 1234 / ABC 1234" inputmode="text" maxlength="12" required>
           </div>
 
           <div class="form-group">
@@ -128,100 +157,231 @@
             <select id="purpose" required>
               <option value="">-- กรุณาเลือก --</option>
               <option value="ติดต่องาน">ติดต่องาน</option>
-              <option value="ส่ง-รับเอกสาร">ส่ง/รับเอกสาร</option>
-              <option value="ส่ง/รับสินค้า">ส่ง/รับสินค้า</option>
+              <option value="ส่ง-รับของ">ส่ง-รับของ</option>
               <option value="สมัครงาน">สมัครงาน</option>
               <option value="อื่น ๆ">อื่น ๆ</option>
             </select>
           </div>
 
           <div class="form-group" id="purposeOtherGroup" style="display:none">
-            <label for="purposeOther">ระบุวัตถุประสงค์ (ถ้าเลือกอื่น ๆ)</label>
-            <input type="text" id="purposeOther" maxlength="120" placeholder="ระบุวัตถุประสงค์เพิ่มเติม">
+            <label for="purposeOther">ระบุวัตถุประสงค์ (ถ้าเลือกอื่น ๆ) <span class="required">*</span></label>
+            <input type="text" id="purposeOther" placeholder="ระบุวัตถุประสงค์เพิ่มเติม" maxlength="120">
           </div>
 
           <div class="form-group">
-            <label for="department">แผนกที่ต้องการติดต่อ <span class="required">*</span></label>
+            <label for="department">แผนก <span class="required">*</span></label>
             <select id="department" required>
               <option value="">-- กรุณาเลือก --</option>
               <option value="PD">PD</option>
-              <option value="PC-W/H">PC-W/H</option>
-              <option value="PE">PE</option>
+              <option value="PC">PC</option>
+              <option value="PC">PE</option>
               <option value="QA/QC">QA/QC</option>
               <option value="Design">Design</option>
               <option value="ซ่อมบำรุง">ซ่อมบำรุง</option>
               <option value="จัดซื้อ">จัดซื้อ</option>
               <option value="บุคคล">บุคคล</option>
               <option value="บัญชี">บัญชี</option>
-              <option value="Safety">Safety</option>
-              <option value="ไอที">ไอที</option>
+              <option value="บัญชี">Safty</option>
+              <option value="IT">IT</option>
             </select>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="contactPerson">ชื่อบุคคลที่เข้าพบ <span class="required">*</span></label>
-          <input type="text" id="contactPerson" required minlength="2" maxlength="120" placeholder="กรอกชื่อผู้ที่ต้องการเข้าพบ">
+          <label for="contactPerson">เข้าพบ <span class="required">*</span></label>
+          <input type="text" id="contactPerson" placeholder="กรอกชื่อผู้ที่ต้องการเข้าพบ" required minlength="2" maxlength="120">
         </div>
 
-        <button type="submit" class="submit-button" id="submitBtn">✅ สร้าง QR Code</button>
-        <button type="button" class="btn-secondary" id="resetBtn">ล้างฟอร์ม</button>
+        <div class="form-group" style="margin-top:10px">
+          <label class="row-inline" style="font-weight:500">
+            <input type="checkbox" id="pdpaConsent" style="width:auto;margin-right:10px">
+            ฉันยินยอมให้บริษัทเก็บและใช้ข้อมูลตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) <span class="required" style="margin-left:6px">*</span>
+          </label>
+          <div class="muted" style="margin-top:6px">ข้อมูลจะถูกใช้เพื่อการลงทะเบียนและความปลอดภัยในการเข้า-ออกสถานที่</div>
+        </div>
       </div>
+
+      <button type="submit" class="submit-button" id="submitBtn">✅ สร้าง QR Code</button>
+      <button type="button" class="btn-secondary" id="resetBtn">ล้างฟอร์ม</button>
     </form>
   </div>
 
   <script>
-    const $=s=>document.querySelector(s);
-    const $$=s=>document.querySelectorAll(s);
-    const formatCarPlate=v=>v.toUpperCase().replace(/\s+/g,' ').trim();
-    const calcTotal=()=>$('#totalPeople').textContent=(1+parseInt($('#followers').value||0,10))+' คน';
-    const getFormData=()=>({
-      fullName:$('#fullName').value.trim(),
-      company:$('#company').value.trim(),
-      carPlate:$('#carPlate').value.trim(),
-      followers:$('#followers').value,
-      purpose:$('#purpose').value==='อื่น ๆ'?($('#purposeOther').value.trim()||'อื่น ๆ'):$('#purpose').value,
-      contactPerson:$('#contactPerson').value.trim(),
-      department:$('#department').value,
-      total:1+parseInt($('#followers').value||0,10),
-      ts:new Date().toISOString()
-    });
-    const setLoading=s=>{const b=$('#submitBtn');b.innerHTML=s?'<span class="loading"></span> กำลังสร้าง QR Code...':'✅ สร้าง QR Code';b.disabled=s;};
+    // ---------- Helpers ----------
+    const $ = (sel)=>document.querySelector(sel);
+    const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
 
-    document.addEventListener('DOMContentLoaded',()=>{
-      $('#followers').addEventListener('change',calcTotal);calcTotal();
-      $('#purpose').addEventListener('change',()=>{$('#purposeOtherGroup').style.display=$('#purpose').value==='อื่น ๆ'?'':'none';});
-      $('#carPlate').addEventListener('input',e=>{const p=e.target.selectionStart;e.target.value=formatCarPlate(e.target.value);e.target.setSelectionRange(p,p);});
-    });
+    function formatCarPlate(val){
+      val = val.toUpperCase().replace(/\s+/g,' ').trim();
+      return val;
+    }
 
-    $('#resetBtn').addEventListener('click',()=>{$('#visitorForm').reset();$('#purposeOtherGroup').style.display='none';$('#totalPeople').textContent='1 คน';});
+    function calcTotal(){
+      const followers = parseInt($('#followers').value || '0',10);
+      const total = 1 + followers;
+      $('#totalPeople').textContent = `${total} คน`;
+    }
 
-    let submitting=false;
-    $('#visitorForm').addEventListener('submit',e=>{
-      e.preventDefault();if(submitting)return;
-      const data=getFormData();
-      if(!data.fullName||!data.company||!data.contactPerson||!data.department||!data.purpose)
-        return Swal.fire({icon:'warning',title:'กรอกข้อมูลไม่ครบ',text:'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน'});
-      if($('#purpose').value==='อื่น ๆ'&&!$('#purposeOther').value.trim())
-        return Swal.fire({icon:'warning',title:'กรุณาระบุวัตถุประสงค์',text:'กรุณากรอกคำอธิบายสำหรับ “อื่น ๆ”'});
+    function getFormData(){
+      const purposeValue = $('#purpose').value === 'อื่น ๆ'
+        ? ($('#purposeOther').value.trim() || 'อื่น ๆ')
+        : $('#purpose').value;
 
-      submitting=true;setLoading(true);
-      setTimeout(()=>{
+      return {
+        fullName: $('#fullName').value.trim(),
+        company: $('#company').value.trim(),
+        carPlate: $('#carPlate').value.trim(),
+        followers: $('#followers').value,
+        purpose: purposeValue,
+        contactPerson: $('#contactPerson').value.trim(),
+        department: $('#department').value,
+        total: 1 + parseInt($('#followers').value || '0',10),
+        pdpa: $('#pdpaConsent').checked ? 'yes' : 'no',
+        ts: new Date().toISOString()
+      };
+    }
+
+    function setLoading(isLoading){
+      const btn = $('#submitBtn');
+      if(isLoading){
+        btn.innerHTML = '<span class="loading"></span> กำลังสร้าง QR Code...';
+        btn.disabled = true;
+      }else{
+        btn.innerHTML = '✅ สร้าง QR Code ใหม่';
+        btn.disabled = false;
+      }
+    }
+
+    // ---------- Events ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      // ปุ่มสัมผัส
+      $$('button').forEach(b=>{
+        b.addEventListener('touchstart',function(){ this.style.transform='scale(0.98)'; });
+        b.addEventListener('touchend',function(){ if(!this.disabled) this.style.transform=''; });
+      });
+
+      // Followers -> Total
+      $('#followers').addEventListener('change', calcTotal);
+      calcTotal();
+
+      // Purpose other
+      $('#purpose').addEventListener('change', ()=>{
+        const showOther = $('#purpose').value === 'อื่น ๆ';
+        $('#purposeOtherGroup').style.display = showOther ? '' : 'none';
+        if(!showOther) $('#purposeOther').value = '';
+      });
+
+      // Car plate format
+      $('#carPlate').addEventListener('input', (e)=>{
+        const pos = e.target.selectionStart;
+        e.target.value = formatCarPlate(e.target.value);
+        e.target.setSelectionRange(pos, pos);
+      });
+
+      // Restore from session
+      const saved = sessionStorage.getItem('visitorFormData');
+      if(saved){
         try{
-          const compressed=LZString.compressToEncodedURIComponent(JSON.stringify(data));
-          const wrap=document.createElement('div');
-          wrap.innerHTML=`
+          const d = JSON.parse(saved);
+          if(d.fullName) $('#fullName').value = d.fullName;
+          if(d.company) $('#company').value = d.company;
+          if(d.carPlate) $('#carPlate').value = d.carPlate;
+          if(d.followers!=null) $('#followers').value = String(d.followers);
+          if(d.department) $('#department').value = d.department;
+          if(d.purpose){
+            $('#purpose').value = (['ติดต่องาน','ส่ง-รับของ','สมัครงาน','อื่น ๆ'].includes(d.purpose)) ? d.purpose : 'อื่น ๆ';
+            if($('#purpose').value==='อื่น ๆ'){
+              $('#purposeOtherGroup').style.display='';
+              $('#purposeOther').value = (['ติดต่องาน','ส่ง-รับของ','สมัครงาน','อื่น ๆ'].includes(d.purpose)?'':d.purpose);
+            }
+          }
+          if(d.pdpa==='yes') $('#pdpaConsent').checked = true;
+          calcTotal();
+        }catch{}
+      }
+    });
+
+    // Enter -> next
+    document.addEventListener('keydown', function(e){
+      if(e.key==='Enter' && e.target.tagName==='INPUT'){
+        e.preventDefault();
+        const inputs = $$('#visitorForm input, #visitorForm select');
+        const idx = inputs.indexOf(e.target);
+        if(idx < inputs.length - 1){ inputs[idx+1].focus(); }
+      }
+    });
+
+    // Reset
+    $('#resetBtn').addEventListener('click', ()=>{
+      $('#visitorForm').reset();
+      $('#purposeOtherGroup').style.display='none';
+      $('#totalPeople').textContent = '1 คน';
+      sessionStorage.removeItem('visitorFormData');
+    });
+
+    // Submit
+    let submitting = false;
+    $('#visitorForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      if(submitting) return;
+      const data = getFormData();
+
+      // Validations
+      if(!data.fullName || !data.company || !data.contactPerson || !data.department || !data.purpose){
+        Swal.fire({icon:'warning',title:'กรอกข้อมูลไม่ครบ',text:'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน'}); return;
+      }
+      if($('#purpose').value==='อื่น ๆ' && !$('#purposeOther').value.trim()){
+        Swal.fire({icon:'warning',title:'กรุณาระบุวัตถุประสงค์',text:'กรุณากรอกคำอธิบายสำหรับ “อื่น ๆ”'}); return;
+      }
+      if(!$('#pdpaConsent').checked){
+        Swal.fire({icon:'info',title:'ยังไม่ได้ยินยอม',text:'กรุณายินยอมตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) ก่อนดำเนินการต่อ'}); return;
+      }
+
+      // Save session
+      sessionStorage.setItem('visitorFormData', JSON.stringify(data));
+
+      submitting = true;
+      setLoading(true);
+
+      setTimeout(()=>{ // mock processing
+        try{
+          const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(data));
+
+          const wrap = document.createElement('div');
+          wrap.innerHTML = `
             <div id="qr-code-container" style="display:flex;justify-content:center"></div>
-            <div style="font-size:13px;margin-top:12px;color:#2d3748;background:#fefcbf;border:1px solid #f6e05e;border-radius:8px;padding:10px">
-              📸 โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่รักษาความปลอดภัย
-            </div>`;
-          new QRCode(wrap.querySelector('#qr-code-container'),{text:compressed,width:280,height:280,colorDark:"#000",colorLight:"#fff",correctLevel:QRCode.CorrectLevel.H});
-          Swal.fire({title:'QR Code ของคุณ',html:wrap,width:360,confirmButtonText:'ปิด'});
+            <div style="font-size:13px;margin-top:12px;color:red;background:#fff;padding:12px">
+  โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่รักษาความปลอดภัย และสามารถแคปหน้าจอไว้ใช้งานครั้งหน้า
+</div>
+
+          `;
+
+          const container = wrap.querySelector('#qr-code-container');
+          new QRCode(container, {
+            text: compressed, width: 280, height: 280,
+            colorDark:"#000000", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H
+          });
+
+          // ❗ เหลือแค่ปุ่ม "ปิด" อย่างเดียว
+          Swal.fire({
+            title: 'QR Code ของคุณ',
+            html: wrap,
+            width: 360,
+            showConfirmButton: true,
+            confirmButtonText: 'ปิด',
+            showDenyButton: false
+          });
+
+          setLoading(false);
         }catch(err){
-          console.error(err);
+          console.error('QR Error:', err);
           Swal.fire({icon:'error',title:'เกิดข้อผิดพลาด',text:'ไม่สามารถสร้าง QR Code ได้'});
-        }finally{submitting=false;setLoading(false);}
-      },500);
+          $('#submitBtn').innerHTML = '✅ สร้าง QR Code';
+          $('#submitBtn').disabled = false;
+        }finally{
+          submitting = false;
+        }
+      }, 500);
     });
   </script>
 </body>
