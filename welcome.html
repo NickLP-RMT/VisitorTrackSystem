@@ -75,44 +75,51 @@
       line-height: 1.4;
     }
 
-.content-text {
-  font-size: 15px;
-  color: #2d3748;
-  line-height: 1.8;
-  margin-bottom: 30px;
-  text-align: justify;
-  background: #f7fafc;
-  padding: 24px 26px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  border-left: 4px solid #3182ce;
-  max-height: 350px;
-  overflow-y: auto;
-  white-space: normal;
-}
+    .content-text {
+      font-size: 15px;
+      color: #2d3748;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      text-align: justify;
+      text-justify: inter-word;
+      background: #f7fafc;
+      padding: 24px 26px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      border-left: 4px solid #3182ce;
+      max-height: 350px;
+      overflow-y: auto;
+      white-space: normal;
+    }
 
-.content-text p {
-  text-indent: 2em; /* ย่อหน้า */
-  margin-bottom: 10px;
-}
+    /* ✅ จัดระยะบรรทัดและย่อหน้าให้เรียบ */
+    .content-text p,
+    .content-text li {
+      line-height: 1.75;
+      margin-bottom: 8px;
+      text-align: justify;
+      text-justify: inter-word;
+      word-break: break-word;
+    }
 
-.content-text b {
-  display: block;
-  margin-top: 14px;
-  margin-bottom: 6px;
-  color: #1a365d;
-  font-size: 16px;
-}
+    .content-text b {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      color: #1e3a8a;
+      font-size: 15.5px;
+      font-weight: 700;
+      line-height: 1.6;
+    }
 
-.content-text ul {
-  margin-left: 30px;
-  margin-bottom: 10px;
-}
+    .content-text ul {
+      margin-left: 2em;
+      padding-left: 0;
+    }
 
-.content-text li {
-  margin-bottom: 4px;
-}
-
+    .content-text li::marker {
+      color: #2563eb;
+    }
 
     .consent-button {
       width: 100%;
@@ -167,39 +174,40 @@
     }
 
     .header, .main-container { animation: fadeInUp 0.6s ease-out; }
+
+    /* 📱 Responsive */
     @media (max-width: 480px) {
-  .main-container {
-    padding: 20px 18px;
-  }
+      .main-container {
+        padding: 20px 18px;
+      }
 
-  .content-text {
-    font-size: 14px;
-    padding: 16px;
-    line-height: 1.7;
-    max-height: 320px; /* ลดนิดหน่อยให้พอดีจอมือถือ */
-  }
+      .content-text {
+        font-size: 14px;
+        padding: 16px;
+        line-height: 1.7;
+        max-height: 320px;
+      }
 
-  .company-name {
-    font-size: 18px;
-  }
+      .company-name {
+        font-size: 18px;
+      }
 
-  .consent-button {
-    font-size: 15px;
-    padding: 14px 18px;
-  }
+      .consent-button {
+        font-size: 15px;
+        padding: 14px 18px;
+      }
 
-  #scrollNotice {
-    font-size: 12px;
-  }
-}
-
+      #scrollNotice {
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <div class="logo-section">
-      <div class="company-name">RMT Visitor Track System</div>
       <img src="logo.png" alt="Company Logo" class="company-logo">
+      <div class="company-name">RMT Visitor Track System</div>
     </div>
   </div>
 
@@ -277,12 +285,12 @@
 </div>
 
 
-       <button id="consentBtn" class="consent-button" onclick="goToForm()" disabled>
+  <button id="consentBtn" class="consent-button" onclick="goToForm()" disabled>
       ✅ ยินยอมและดำเนินการต่อ
     </button>
 
     <div id="scrollNotice">⚠️ กรุณาเลื่อนอ่านเงื่อนไขจนสุดก่อนกดยินยอม</div>
-    
+
     <div class="footer-info">
       ระบบจัดการผู้เยี่ยมชม | Resonac Materials (Thailand) Co., Ltd.<br>
       ข้อมูลของท่านจะได้รับการคุ้มครองตาม พ.ร.บ. PDPA 2562
