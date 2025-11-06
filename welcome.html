@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ยินดีต้อนรับ - RMT Visitor Check-in</title>
+  <title>ข้อกำหนดและเงื่อนไข - RMT Visitor Track System</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #091f82 0%, #ffffff 100%);
@@ -32,26 +28,22 @@
       border-radius: 20px 20px 0 0;
       text-align: center;
       border-bottom: 3px solid #2c5282;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
     }
 
-    .logo-section {
-      margin-bottom: 15px;
+    .company-logo {
+      height: 40px;
+      width: auto;
     }
 
     .company-name {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
       color: #2c5282;
-      margin-bottom: 5px;
       letter-spacing: 0.5px;
-    }
-
-    .system-title {
-      font-size: 14px;
-      color: #4a5568;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1px;
     }
 
     .main-container {
@@ -70,18 +62,9 @@
     .main-container::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 4px;
       background: linear-gradient(90deg, #2c5282, #3182ce, #4299e1);
-    }
-
-    .shield-icon {
-      font-size: 48px;
-      margin-bottom: 20px;
-      color: #2c5282;
-      text-shadow: 0 2px 4px rgba(44, 82, 130, 0.3);
     }
 
     .main-title {
@@ -97,16 +80,14 @@
       color: #4a5568;
       line-height: 1.7;
       margin-bottom: 30px;
-      text-align: left;
+      text-align: justify;
       background: #f7fafc;
       padding: 20px;
       border-radius: 12px;
+      border: 1px solid #ddd;
       border-left: 4px solid #3182ce;
-    }
-
-    .highlight-text {
-      color: #2c5282;
-      font-weight: 600;
+      max-height: 350px;
+      overflow-y: auto;
     }
 
     .consent-button {
@@ -114,7 +95,6 @@
       padding: 16px 24px;
       font-size: 16px;
       font-weight: 600;
-      background: linear-gradient(135deg, #2c5282 0%, #3182ce 100%);
       color: white;
       border: none;
       border-radius: 12px;
@@ -125,14 +105,20 @@
       letter-spacing: 0.3px;
     }
 
-    .consent-button:hover {
+    .consent-button:disabled {
+      background: #a0aec0 !important;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .consent-button:not(:disabled) {
+      background: linear-gradient(135deg, #2c5282 0%, #3182ce 100%);
+    }
+
+    .consent-button:not(:disabled):hover {
       background: linear-gradient(135deg, #2a4c80 0%, #2c7cb8 100%);
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(44, 82, 130, 0.4);
-    }
-
-    .consent-button:active {
-      transform: translateY(0);
     }
 
     .footer-info {
@@ -142,114 +128,35 @@
       text-align: center;
     }
 
-    /* Mobile Responsive */
-    @media (max-width: 480px) {
-      body {
-        padding: 15px;
-      }
-      
-      .header {
-        padding: 15px;
-        border-radius: 15px 15px 0 0;
-      }
-      
-      .company-name {
-        font-size: 20px;
-      }
-      
-      .system-title {
-        font-size: 12px;
-      }
-      
-      .main-container {
-        padding: 25px 20px;
-        border-radius: 0 0 15px 15px;
-      }
-      
-      .shield-icon {
-        font-size: 40px;
-        margin-bottom: 15px;
-      }
-      
-      .main-title {
-        font-size: 18px;
-        margin-bottom: 20px;
-      }
-      
-      .content-text {
-        font-size: 14px;
-        padding: 15px;
-        margin-bottom: 25px;
-      }
-      
-      .consent-button {
-        padding: 14px 20px;
-        font-size: 15px;
-      }
-    }
-
-    /* Very small screens */
-    @media (max-width: 320px) {
-      .header, .main-container {
-        max-width: 280px;
-      }
-      
-      .company-name {
-        font-size: 18px;
-      }
-      
-      .main-title {
-        font-size: 16px;
-      }
-      
-      .content-text {
-        font-size: 13px;
-      }
-    }
-
-    /* iOS safe area */
-    @supports (padding: max(0px)) {
-      body {
-        padding-top: max(20px, env(safe-area-inset-top));
-        padding-bottom: max(20px, env(safe-area-inset-bottom));
-      }
+    #scrollNotice {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #b91c1c;
+      font-style: italic;
+      display: block;
     }
 
     /* Animation */
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .header, .main-container {
-      animation: fadeInUp 0.6s ease-out;
-    }
-
-    .main-container {
-      animation-delay: 0.2s;
-    }
+    .header, .main-container { animation: fadeInUp 0.6s ease-out; }
   </style>
 </head>
 <body>
   <div class="header">
     <div class="logo-section">
-      <div class="company-name">Resonac Materials (Thailand) Co., Ltd.</div>
-      <div class="system-title">Visitor Management System</div>
+      <div class="company-name">RMT Visitor Track System</div>
+      <img src="logo.png" alt="Company Logo" class="company-logo">
     </div>
   </div>
 
   <div class="main-container">
-    <div class="shield-icon">🛡️</div>
-    
     <h1 class="main-title">ข้อกำหนดและเงื่อนไข</h1>
 
-<div class="content-text" style="text-align: justify; white-space: pre-line;">
+<div class="content-text" id="terms">
 ข้อกำหนดและเงื่อนไขนี้จัดทำขึ้นเพื่อแจ้งต่อท่านในฐานะผู้มาติดต่อหรือบุคคลภายนอก ซึ่งไม่มีบัตรแสดงตัวตนของบริษัท เรโซแนค แมททีเรียลส์ (ประเทศไทย) จำกัด (“บริษัทฯ”) เกี่ยวกับการตั้งจุดตรวจสอบ และการลงบันทึกรายละเอียดของผู้มาติดต่อหรือบุคคลภายนอกในการเข้ามายังพื้นที่ของบริษัทฯ และลงบันทึกการเข้า-ออกอาคารเพื่อดำเนินการกิจกรรมใด ๆ กับบริษัทฯ โดยมีวัตถุประสงค์เพื่อการยืนยันตัวตน การรักษาความปลอดภัยของอาคารและสถานที่ การปกป้องชีวิตและทรัพย์สิน และการป้องกันการกระทำผิดกฎหมายหรืออาชญากรรมอันอาจเกิดขึ้นในพื้นที่ของบริษัทฯ รวมถึงเพื่อการควบคุมโรค หรือเพื่อการปฏิบัติตามกฎหมายอื่นที่เกี่ยวข้อง ทั้งนี้การที่ท่านเข้ามาในพื้นที่บริษัทฯ ถือเป็นการรับทราบประกาศนี้ ทั้งนี้ โปรดระงับการเข้าพื้นที่ หากท่านไม่เห็นด้วยกับประกาศนี้และยังคงเข้ามาในพื้นที่บริษัทฯ จะถือว่าท่านได้รับทราบประกาศนี้แล้ว
 
 <b>บทนิยาม</b>
@@ -316,15 +223,7 @@
       ✅ ยินยอมและดำเนินการต่อ
     </button>
 
-    <div id="scrollNotice" style="
-      margin-top: 8px;
-      font-size: 13px;
-      color: #b91c1c;
-      font-style: italic;
-      display: block;
-    ">
-      ⚠️ กรุณาเลื่อนอ่านเงื่อนไขจนสุดก่อนกดยินยอม
-    </div>
+    <div id="scrollNotice">⚠️ กรุณาเลื่อนอ่านเงื่อนไขจนสุดก่อนกดยินยอม</div>
     
     <div class="footer-info">
       ระบบจัดการผู้เยี่ยมชม | Resonac Materials (Thailand) Co., Ltd.<br>
@@ -335,7 +234,6 @@
   <script>
     function goToForm() {
       const button = document.getElementById('consentBtn');
-      const originalText = button.innerHTML;
       button.innerHTML = '⏳ กำลังดำเนินการ...';
       button.disabled = true;
       setTimeout(() => {
@@ -343,27 +241,19 @@
       }, 800);
     }
 
-    // ✅ ฟังก์ชันตรวจจับว่าเลื่อนอ่านถึงสุดหรือยัง
     document.addEventListener('DOMContentLoaded', function() {
-      const content = document.querySelector('.content-text');
+      const content = document.getElementById('terms');
       const button = document.getElementById('consentBtn');
       const notice = document.getElementById('scrollNotice');
 
-      // ตรวจทุกครั้งเมื่อ scroll
       content.addEventListener('scroll', function() {
         const scrollBottom = content.scrollTop + content.clientHeight;
         const isAtBottom = scrollBottom >= content.scrollHeight - 10;
-
         if (isAtBottom) {
           button.disabled = false;
           notice.style.display = 'none';
         }
       });
-
-      // เพิ่ม scroll bar ให้กับเนื้อหา
-      content.style.maxHeight = '350px';
-      content.style.overflowY = 'auto';
-      content.style.border = '1px solid #ddd';
     });
   </script>
 </body>
